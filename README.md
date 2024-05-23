@@ -12,7 +12,7 @@ We are creating CDNs for each javascript file in this repository via [JSDelivr](
 3. Get your code changes reviewed and approved.
 4. Merge pull request to main.
 5. Create a new tag for the repository. Using version tags will allow us to create a new release version for the repo. JSDelivr needs to know there is a new release in the repo so we can purge the caches of the files we want updated in our site environments.
-6. After creating a new release version for the repository, copy the file you want to update in qa by copying the github url of the file.
+6. After creating a new release version for the repository, copy the file you want to update in the QA environment by copying the github url of the file.
 7. go [here](https://www.jsdelivr.com/github) and paste the copied url into the first input. Replace the branch name "main" with the version number of the tag you just created.
 8. Replace the old CDN url in the QA environment with the new URL. Have interested parties review changes on the site as necessary.
 
