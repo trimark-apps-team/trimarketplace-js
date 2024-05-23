@@ -1,22 +1,3 @@
-// ===========================================================
-// ===========================================================
-// append TriMarketplace tracking events script
-// ===========================================================
-// ===========================================================
-(function () {
-    var s = document.createElement('script');
-    var b = document.body;
-    s.src = 'https://cdn.jsdelivr.net/gh/kkindorf-trimarkusa/tracking-events-trimarketplace@latest/tracking.js?n=26'
-    b.appendChild(s);
-})();
-
-// ===========================================================
-// ===========================================================
-// end tracking events script
-// ===========================================================
-// ===========================================================
-
-
 
 // ===========================================================
 // ===========================================================
@@ -866,8 +847,6 @@ setFooterHtml = (links) => {
     address = '<span>TriMark USA LLC</span><span>9 Hampshire Street</span><span>Mansfield, MA 02048</span><span>P: 888.288.5346</span>';
     copyright = '<span>Copyright &copy; 2024  TriMark. All Rights Reserved.</span>';
 
-    // prod only logo
-    img = '/documents/24337183/24339947/trimark-logo-232.png';
     logoImg = '<a href=https://www.trimarkusa.com><img src="/documents/24337183/24339947/trimark-logo-232.png" /></a>';
 
     // insert footer elements one at a time
