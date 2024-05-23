@@ -6,9 +6,7 @@ The all-pages.js file in this repository is the site wide js, all other files ar
 
 We are creating CDNs for each javascript file in this repository via [JSDelivr](https://www.jsdelivr.com/github)
 
-## Managing file changes with JSDelivr
-We currently have a QA environment and production environment for Rhythm. We want to be able to test new features on QA to committed code without effecting production. So how do does JSDelivr help us manage that workflow process?
-When a feature is ready to be tested on QA go through the following steps in order:
+## Workflow for this repo
 1. Create a new branch based off of Main.
 2. When you think you think you are ready to merge your changes, create a new pull request against main.
 3. Get your code changes reviewed and approved.
