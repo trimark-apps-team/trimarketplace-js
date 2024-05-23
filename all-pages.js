@@ -847,7 +847,7 @@ setFooterHtml = (links) => {
     address = '<span>TriMark USA LLC</span><span>9 Hampshire Street</span><span>Mansfield, MA 02048</span><span>P: 888.288.5346</span>';
     copyright = '<span>Copyright &copy; 2024  TriMark. All Rights Reserved.</span>';
 
-    logoImg = '<a href=https://www.trimarkusa.com><img src="/documents/24337183/24339947/trimark-logo-232.png" /></a>';
+    logoImg = '<a href=https://www.trimarkusa.com><img src="https://shop.trimarketplace.com/documents/24337183/24339947/trimark-logo-232.png" /></a>';
 
     // insert footer elements one at a time
     $(logoImg).prependTo($('.dynamic-menu-footer #logo'));
