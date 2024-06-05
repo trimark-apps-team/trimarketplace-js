@@ -223,3 +223,15 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
 });
 
 fooObserver.observe(document.body, { childList: true, subtree: true });
+
+var intervalId = window.setInterval(function () {
+    const checkoutConfirmationPage = $('.checkout-container .confirmation-container')
+    if (checkoutConfirmationPage.length) {
+        let appendCount = 0;
+        if (appendCount === 0) {
+            $('.confirmation-container .title.confirmation').append($(".confirmation-survey").show())
+            appendCount++;
+            clearInterval(intervalId)
+        }
+    }
+}, 500);
