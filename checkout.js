@@ -217,8 +217,9 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         if(window.location.href.includes("qa")) {
             salesEmail = "kevin.kindorf@gmail.com"
         }
-        let sendCount = 0
-        if(sendCount == 0) {
+        let sendCount = 0;
+        if(sendCount === 0) {
+            sendCount++;
             $.ajax({
                 url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
                 type: 'post',
@@ -226,14 +227,14 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                 contentType: 'application/json',
                 success: function (data) {
                     console.log('success');
-                    sendCount++
+                    
                 },
                 data: JSON.stringify({
                     "emailId": "170878458282",
                     "message": {
                         "to": "kevin.kindorf@trimarkusa.com",
                         "from": "kevin.kindorf@trimarkusa.com",
-                        "cc": ["kevin.kindorf@trimarkusa.com"]
+                        "cc": ["ben.ray@trimarkusa.com"]
                     },
                     "customProperties": {
                         "customer": customerEmail,
