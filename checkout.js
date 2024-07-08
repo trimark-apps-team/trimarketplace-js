@@ -235,7 +235,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                     "message": {
                         "to": "kevin.kindorf@trimarkusa.com",
                         "from": "kevin.kindorf@trimarkusa.com",
-                        "cc": ["ben.ray@trimarkusa.com"]
+                        "cc": ["ben.ray@trimarkusa.com", "peter.schiller@trimarkusa.com"]
                     },
                     "customProperties": {
                         "customer": customerEmail,
