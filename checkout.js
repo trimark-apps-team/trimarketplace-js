@@ -206,14 +206,45 @@ $(document).ready(function () {
 
 
 const fooObserver = new MutationObserver((_mutationList, observer) => {
-    const shippingStep = $('.checkout-container .checkout-container')
     const checkoutConfirmation = $('.checkout-container .confirmation-container')
     const reviewContainer = $(".checkout-container .review-container")
-    //if (shippingStep && window.location.href.includes('checkoutpage/deliverymethod')) {
-    // $(".thank-you-container").hide()
-    // }
+ 
     if (checkoutConfirmation && window.location.href.includes('checkoutpage/confirmation')) {
         $(".thank-you-container").hide()
+
+        let items = JSON.parse(sessionStorage.getItem('checkout_items'))
+        let grandTotal = parseFloat($(".order-summary-component .total .amount").text().replace(/[^.0-9]/g, '')) || 0.00
+        let salesEmail = sessionStorage.getItem('salesEmail')
+        let customerEmail = sessionStorage.getItem('customerEmail')
+        if(window.location.href.includes("qa")) {
+            salesEmail = "kevin.kindorf@gmail.com"
+        }
+        let sendCount = 0
+        if(salesEmail && sendCount == 0) {
+            $.ajax({
+                url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('success');
+                    sendCount++
+                },
+                data: JSON.stringify({
+                    "emailId": "170878458282",
+                    "message": {
+                        "to": salesEmail,
+                        "from": "kevin.kindorf@trimarkusa.com",
+                        "cc": ["ben.ray@trimarkusa.com", "kevin.kindorf@trimarkusa.com"]
+                    },
+                    "customProperties": {
+                        "customer": customerEmail,
+                        "cart_total": grandTotal,
+                        "cart": items
+                    }
+                })
+            });
+        }
     }
     if (reviewContainer && window.location.href.includes('checkoutpage/review')) {
         $(".thank-you-container").show()
@@ -232,6 +263,7 @@ var intervalId = window.setInterval(function () {
             $('.confirmation-container .title.confirmation').append($(".confirmation-survey").show())
             appendCount++;
             clearInterval(intervalId)
+            se
         }
     }
 }, 500);

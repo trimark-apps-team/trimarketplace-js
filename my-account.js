@@ -131,6 +131,8 @@ function getSalesmanDetail(smcd) {
         // display on page
         let ele = $('.rhy.widget__rhythmecomcustomerservicecontactinfoportlet_WAR_rhythmecomcustomerservicecontactinfoportlet_ .dashboard-container.customer-service ul')[0];
         $(ele).prepend(wc);
+        console.log(semail)
+        sessionStorage.setItem('salesEmail', semail)
       }
       else {
         // error
@@ -156,6 +158,9 @@ function getSalesmanDetail(smcd) {
 $('document').ready(function () {
 
   dspSaleInfo()
+  const customerEmail = $(".user-email")
+  console.log(customerEmail)
+  sessionStorage.setItem('customerEmail', customerEmail)
 
 });
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
