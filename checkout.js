@@ -48,6 +48,7 @@ $(document).ready(function () {
     var hasEquipmentTrue = false;
     var hasEquipmentFalse = false;
     const equipShippingDiv = $('<div id="shipping-error" style="color:#A12641; padding-bottom:10px; font-weight:600;">Your order contains equipment and non-equipment items. Please go back to update cart .</div>');
+    sessionStorage.removeItem('transactionalEmailSent')
 
     // --------- MutationObserver ------------//
     const config = { childList: true, characterData: true, subtree: true, attributes: true };
@@ -217,8 +218,8 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         if(window.location.href.includes("qa")) {
             salesEmail = "kevin.kindorf@gmail.com"
         }
-        let sentEmail = sessionStorage.getItem('transactionalEmailSent')
-        if(!sentEmail) {
+      
+        if(!sessionStorage.getItem('transactionalEmailSent')) {
             sessionStorage.setItem('transactionalEmailSent', true)
             $.ajax({
                 url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
