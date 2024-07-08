@@ -115,7 +115,8 @@ function getSalesmanDetail(smcd) {
   })
     .then((res) => res.json())		//  convert response to json
     .then(function (data) {
-      sessionStorage.setItem('salesEmail', data.results[0].records[0].NAME)
+      console.log(data.results[0].records[0].EMAL)
+      sessionStorage.setItem('salesEmail', data.results[0].records[0].EMAL)
       if (data.nrOfSuccessfullTransactions > 0) {
         let sname = data.results[0].records[0].NAME;
         let semail = data.results[0].records[0].EMAL;
@@ -131,8 +132,6 @@ function getSalesmanDetail(smcd) {
         // display on page
         let ele = $('.rhy.widget__rhythmecomcustomerservicecontactinfoportlet_WAR_rhythmecomcustomerservicecontactinfoportlet_ .dashboard-container.customer-service ul')[0];
         $(ele).prepend(wc);
-        console.log(semail)
-        sessionStorage.setItem('salesEmail', semail)
       }
       else {
         // error
