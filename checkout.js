@@ -263,7 +263,6 @@ var intervalId = window.setInterval(function () {
             $('.confirmation-container .title.confirmation').append($(".confirmation-survey").show())
             appendCount++;
             clearInterval(intervalId)
-            se
         }
     }
 }, 500);
