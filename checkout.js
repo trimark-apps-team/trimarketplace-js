@@ -215,6 +215,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         let grandTotal = parseFloat($(".order-summary-component .total .amount").text().replace(/[^.0-9]/g, '')) || 0.00
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
+        let customerNumber = sessionStorage.getItem('customerNumber')
         if(window.location.href.includes("qa")) {
             salesEmail = "kevin.kindorf@gmail.com"
         }
@@ -238,7 +239,8 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                         "cc": ["ben.ray@trimarkusa.com", "peter.schiller@trimarkusa.com"]
                     },
                     "customProperties": {
-                        "customer": customerEmail,
+                        "customerEmail": customerEmail,
+                        "customerNumber": customerNumber,
                         "cart_total": grandTotal,
                         "cart": items
                     }

@@ -68,7 +68,7 @@ function dspSaleInfo() {
     })
       .then((res) => res.json())		//  convert response to json
       .then(function (data) {
-
+         console.log(data, 'line 71')
         if (data.nrOfSuccessfullTransactions > 0) {
           smcd = data.results[0].records[0].SMCD;
 
@@ -110,12 +110,14 @@ function getSalesmanDetail(smcd) {
   // call m3 api to get salesman detail
   let apiurl = g_mns150_GetUserData + smcd;
 
+
   fetch(apiurl, {
     method: "GET"
   })
     .then((res) => res.json())		//  convert response to json
     .then(function (data) {
-      console.log(data.results[0].records[0].EMAL)
+      console.log(data, 'line 119')
+      console.log(data.results[0].records[0].EMAL, 'line 120')
       sessionStorage.setItem('salesEmail', data.results[0].records[0].EMAL)
       if (data.nrOfSuccessfullTransactions > 0) {
         let sname = data.results[0].records[0].NAME;
@@ -159,10 +161,12 @@ $('document').ready(function () {
   sessionStorage.removeItem('customerEmail')
   sessionStorage.removeItem('salesEmail')
   dspSaleInfo()
-  const customerEmail = $(".user-email").text().split('Email:')
-  let formattedEmail = customerEmail[1].replace(/\s+/g,'');
-  console.log(formattedEmail)
-  sessionStorage.setItem('customerEmail', formattedEmail)
+  $.get("/delegate/ecom-api/users/current", function (data) {
+    console.log(data.activeUserGroup.customerNumber)
+    sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber)
+    sessionStorage.setItem('customerEmail', data.email)
+});
+  
 
 });
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
