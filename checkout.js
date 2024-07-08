@@ -216,9 +216,9 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
         let customerNumber = sessionStorage.getItem('customerNumber')
-        if(window.location.href.includes("qa")) {
-            salesEmail = "kevin.kindorf@gmail.com"
-        }
+        // if(window.location.href.includes("qa")) {
+        //     salesEmail = "kevin.kindorf@gmail.com"
+        // }
       
         if(!sessionStorage.getItem('transactionalEmailSent')) {
             sessionStorage.setItem('transactionalEmailSent', true)
@@ -234,9 +234,9 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                 data: JSON.stringify({
                     "emailId": "170878458282",
                     "message": {
-                        "to": "kevin.kindorf@trimarkusa.com",
-                        "from": "kevin.kindorf@trimarkusa.com",
-                        "cc": ["ben.ray@trimarkusa.com", "peter.schiller@trimarkusa.com"]
+                        "to": salesEmail,
+                        "from": "support@trimarkusa.com",
+                        "cc": ["ben.ray@trimarkusa.com", "peter.schiller@trimarkusa.com", "kevin.kindorf@trimarkusa.com"]
                     },
                     "customProperties": {
                         "customerEmail": customerEmail,

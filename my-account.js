@@ -162,7 +162,6 @@ $('document').ready(function () {
   sessionStorage.removeItem('salesEmail')
   dspSaleInfo()
   $.get("/delegate/ecom-api/users/current", function (data) {
-    console.log(data.activeUserGroup.customerNumber)
     sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber)
     sessionStorage.setItem('customerEmail', data.email)
 });
