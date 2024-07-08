@@ -203,8 +203,6 @@ $(document).ready(function () {
 });
 
 
-
-
 const fooObserver = new MutationObserver((_mutationList, observer) => {
     const checkoutConfirmation = $('.checkout-container .confirmation-container')
     const reviewContainer = $(".checkout-container .review-container")
@@ -233,9 +231,9 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                 data: JSON.stringify({
                     "emailId": "170878458282",
                     "message": {
-                        "to": salesEmail,
+                        "to": "kevin.kindorf@trimarkusa.com",
                         "from": "kevin.kindorf@trimarkusa.com",
-                        "cc": ["ben.ray@trimarkusa.com", "kevin.kindorf@trimarkusa.com"]
+                        "cc": ["kevin.kindorf@trimarkusa.com"]
                     },
                     "customProperties": {
                         "customer": customerEmail,
