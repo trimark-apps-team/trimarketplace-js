@@ -217,9 +217,9 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         if(window.location.href.includes("qa")) {
             salesEmail = "kevin.kindorf@gmail.com"
         }
-        let sendCount = 0;
-        if(sendCount === 0) {
-            sendCount++;
+        let sentEmail = sessionStorage.getItem('transactionalEmailSent')
+        if(!sentEmail) {
+            sessionStorage.setItem('transactionalEmailSent', true)
             $.ajax({
                 url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
                 type: 'post',
