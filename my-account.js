@@ -115,7 +115,7 @@ function getSalesmanDetail(smcd) {
   })
     .then((res) => res.json())		//  convert response to json
     .then(function (data) {
-      console.log(data.results[0])
+      sessionStorage.setItem('salesEmail', data.results[0].records[0].NAME)
       if (data.nrOfSuccessfullTransactions > 0) {
         let sname = data.results[0].records[0].NAME;
         let semail = data.results[0].records[0].EMAL;
@@ -158,6 +158,10 @@ function getSalesmanDetail(smcd) {
 $('document').ready(function () {
 
   dspSaleInfo()
+  const customerEmail = $(".user-email").text().split('Email:')
+  let formattedEmail = customerEmail[1].replace(/\s+/g,'');
+  console.log(formattedEmail)
+  sessionStorage.setItem('customerEmail', formattedEmail)
 
 });
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
