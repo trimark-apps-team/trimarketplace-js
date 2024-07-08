@@ -218,7 +218,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             salesEmail = "kevin.kindorf@gmail.com"
         }
         let sendCount = 0
-        if(salesEmail && sendCount == 0) {
+        if(sendCount == 0) {
             $.ajax({
                 url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
                 type: 'post',
