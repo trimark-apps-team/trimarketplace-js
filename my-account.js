@@ -155,7 +155,9 @@ function getSalesmanDetail(smcd) {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Initialization
 $('document').ready(function () {
-
+  // remove the session storage items on initial page ready so we can reset
+  sessionStorage.removeItem('customerEmail')
+  sessionStorage.removeItem('salesEmail')
   dspSaleInfo()
   const customerEmail = $(".user-email").text().split('Email:')
   let formattedEmail = customerEmail[1].replace(/\s+/g,'');
