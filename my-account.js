@@ -68,7 +68,6 @@ function dspSaleInfo() {
     })
       .then((res) => res.json())		//  convert response to json
       .then(function (data) {
-         console.log(data, 'line 71')
         if (data.nrOfSuccessfullTransactions > 0) {
           smcd = data.results[0].records[0].SMCD;
 
@@ -116,8 +115,6 @@ function getSalesmanDetail(smcd) {
   })
     .then((res) => res.json())		//  convert response to json
     .then(function (data) {
-      console.log(data, 'line 119')
-      console.log(data.results[0].records[0].EMAL, 'line 120')
       sessionStorage.setItem('salesEmail', data.results[0].records[0].EMAL)
       if (data.nrOfSuccessfullTransactions > 0) {
         let sname = data.results[0].records[0].NAME;
@@ -164,8 +161,8 @@ $('document').ready(function () {
   $.get("/delegate/ecom-api/users/current", function (data) {
     sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber)
     sessionStorage.setItem('customerEmail', data.email)
-});
-  
+  });
+
 
 });
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
