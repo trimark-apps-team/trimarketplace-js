@@ -44,8 +44,8 @@ const getItemWarehouseInfo = () => {
   console.log(warehouses);
   isNonStock(itno, warehouses)
     .then(result => {
-      console.log('result');
-      console.log(result); // Log the result (true or false) to the 
+      //console.log('result');
+      //console.log(result); // Log the result (true or false) to the 
 
       // info about shipping
       const productInformation = $('.product-information');
@@ -59,12 +59,12 @@ const getItemWarehouseInfo = () => {
       const lowText = '<div class="low-stock-warning"><svg class="icon warning" focusable="false"><use xlink:href="#warning"></use></svg><span class="message warning" style="margin-left:10px">Low</span></div>';
 
       const notInStockText = '<div class="error-message low-warning"><svg class="icon warning" focusable="false"><use xlink:href="#warning"></use></svg><span class="message warning">Low</span></div>';
-      console.log("------");
-      console.log(productInformation);
-      console.log(shippingInformation);
-      console.log(hasNoStockMessage);
-      console.log(lowText);
-      console.log(notInStockText);
+      //console.log("------");
+      //console.log(productInformation);
+      //console.log(shippingInformation);
+      //console.log(hasNoStockMessage);
+      //console.log(lowText);
+      //console.log(notInStockText);
 
 
 
@@ -187,6 +187,8 @@ const isNonStock = async (itno, warehouseList) => {
 
     const hasStockItems = data.results[0].records.some((rec) => {
       const repl = rec.REPL.toString().split(';');
+      console.log('repl');
+      console.log(repl);
       return repl[3] === '30' && warehouseList.includes(repl[2]);
     });
 
