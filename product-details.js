@@ -31,7 +31,7 @@ const loadWarehouses = () => {
       $("body").data({ warehouses: warehouseList });
     })
     .then(() => getItemWarehouseInfo())
-    .then(() => console.log("loaded warehouses"))
+    .then(() => console.log("warehouses loaded"))
 }
 ///////
 
