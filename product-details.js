@@ -185,6 +185,9 @@ const isNonStock = async (itno, warehouseList) => {
     });
     const data = await response.json();
 
+    console.log("DATA");
+    console.log(data);
+
     const hasStockItems = data.results[0].records.some((rec) => {
       const repl = rec.REPL.toString().split(';');
       console.log('repl');
