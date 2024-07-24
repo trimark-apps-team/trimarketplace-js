@@ -216,14 +216,14 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
         let customerNumber = sessionStorage.getItem('customerNumber')
-        // if(window.location.href.includes("qa")) {
-        //     salesEmail = "kevin.kindorf@gmail.com"
-        // }
+        if(window.location.href.includes("qa")) {
+            salesEmail = "kevin.kindorf@gmail.com"
+        }
       
         if(!sessionStorage.getItem('transactionalEmailSent')) {
             sessionStorage.setItem('transactionalEmailSent', true)
             $.ajax({
-                url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
+                url: 'https://eba-rhythm.trimarketplace.com/post-to-hubspot',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
