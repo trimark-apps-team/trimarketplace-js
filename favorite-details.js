@@ -12,6 +12,7 @@ if (targetNode) {
 }
 /* end Mutation Observer */
 
+/* update warning text */
 updateWarningText = () => {
   /* replace "currently not in stock" with "low stock" */
   const warningMessage = $('.message.warning');
