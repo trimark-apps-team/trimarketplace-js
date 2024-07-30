@@ -217,13 +217,14 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         let customerEmail = sessionStorage.getItem('customerEmail')
         let customerNumber = sessionStorage.getItem('customerNumber')
         if(window.location.href.includes("qa")) {
-            salesEmail = "kevin.kindorf@gmail.com"
+            salesEmail = "kevin.kindorf@trimarkusa.com"
+            customerEmail = "kevin.kindorf@trimarkusa.com"
         }
       
         if(!sessionStorage.getItem('transactionalEmailSent')) {
             sessionStorage.setItem('transactionalEmailSent', true)
             $.ajax({
-                url: 'https://eba-rhythm.trimarketplace.com/post-to-hubspot',
+                url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -236,7 +237,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                     "message": {
                         "to": salesEmail,
                         "from": "support@trimarkusa.com",
-                        "cc": ["ben.ray@trimarkusa.com", "peter.schiller@trimarkusa.com", "kevin.kindorf@trimarkusa.com"]
+                        "cc": ["kevin.kindorf@trimarkusa.com"]
                     },
                     "customProperties": {
                         "customerEmail": customerEmail,
@@ -247,6 +248,27 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                 })
             });
         }
+
+        if(sessionStorage.getItem('triggerAbandonCart') == true) {
+            sessionStorage.setItem('triggerAbandonCart', false)
+            console.log('updating abandon cart trigger to false')
+            $.ajax({
+                url: `https://rhythm-hubspot-proxy.onrender.com/abandon-cart?email=${customerEmail}`,
+                type: 'patch',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('abandon cart set to false')
+                    
+                },
+                data: JSON.stringify({
+                    "properties": {
+                        "rhythm_abandoned_cart": "false"
+                    }
+                })
+            });
+        }
+        
     }
     if (reviewContainer && window.location.href.includes('checkoutpage/review')) {
         $(".thank-you-container").show()
@@ -268,3 +290,30 @@ var intervalId = window.setInterval(function () {
         }
     }
 }, 500);
+
+$(document).ready(function() {
+    if(sessionStorage.getItem('customerEmail') !== null) {
+        let customerEmail = sessionStorage.getItem('customerEmail');
+        if(window.location.href.includes('qa')) {
+            customerEmail = 'kevin.kindorf@trimarkusa.com'
+        }
+        $.ajax({
+            url: `https://rhythm-hubspot-proxy.onrender.com/abandon-cart?email=${customerEmail}`,
+            type: 'patch',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                sessionStorage.setItem('triggerAbandonCart', true)
+                
+            },
+            data: JSON.stringify({
+                "properties": {
+                    "rhythm_abandoned_cart": "true",
+                    "rhythm_abandoned_cart_total": sessionStorage.getItem('checkout_value'),
+                    "rhythm_cart_items": sessionStorage.getItem('checkout_items')
+                }
+            })
+        });
+    }
+
+})
