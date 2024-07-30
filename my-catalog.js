@@ -92,7 +92,7 @@ const callback = function (mutationsList, observer) {
 };
 
 $(document).ready(function () {
-    setInterval(updateProductDescription, 2000); // Call updateProductDescription after 1 second
+    setInterval(updateProductDescription, 3000); // Call updateProductDescription after 1 second
 });
 
 const observer = new MutationObserver(callback);
