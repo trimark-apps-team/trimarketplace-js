@@ -6,7 +6,7 @@ const callback = function (mutationsList, observer) {
   //getShippingInfo();     
   //moveStockText(); 
   // getWarehouses();
-
+//getAttributes();
 };
 
 const observer = new MutationObserver(callback);
@@ -21,6 +21,7 @@ if (targetNode) {
 ///////
 $(document).ready(function () {
   setTimeout(loadWarehouses, 1000);
+  setTimeout(setProductDescriptionToItemName, 500);
 });
 
 // Fetch warehouses data and process non-stock items
@@ -38,15 +39,10 @@ const loadWarehouses = () => {
 const getItemWarehouseInfo = () => {
   const warehouses = $("body").data("warehouses");
   let widgetInstance = window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"].instance;
-  const itno = widgetInstance.productDetailModel?.attributes?.id;
+  const itno = widgetInstance.productDetailMode;
 
-  console.log(itno);
-  console.log(warehouses);
   isNonStock(itno, warehouses)
     .then(result => {
-      //console.log('result');
-      //console.log(result); // Log the result (true or false) to the 
-
       // info about shipping
       const productInformation = $('.product-information');
 
@@ -59,20 +55,11 @@ const getItemWarehouseInfo = () => {
       const lowText = '<div class="low-stock-warning"><svg class="icon warning" focusable="false"><use xlink:href="#warning"></use></svg><span class="message warning" style="margin-left:10px">Low</span></div>';
 
       const notInStockText = '<div class="error-message low-warning"><svg class="icon warning" focusable="false"><use xlink:href="#warning"></use></svg><span class="message warning">Low</span></div>';
-      //console.log("------");
-      //console.log(productInformation);
-      //console.log(shippingInformation);
-      //console.log(hasNoStockMessage);
-      //console.log(lowText);
-      //console.log(notInStockText);
-
-
 
       const hasNoStock = $(".title").text().includes('No Stock');
 
       if (result == true && hasNoStock) {
         //is non stock 
-        console.log("add ribbon");
         const ribbonLabel = $('.ribbon-container');
         if (!$(ribbonLabel).find('p.non-stock-pdp').length) {
           $(ribbonLabel).prepend('<p class="non-stock-pdp" style="display: none">Non-Stock</p> ');
@@ -86,7 +73,6 @@ const getItemWarehouseInfo = () => {
 
 
         if (!$(shippingInformation).find('.low-stock-warning').length) {
-          console.log("add message");
           $(shippingInformation).prepend(lowText);
         }
 
@@ -184,14 +170,9 @@ const isNonStock = async (itno, warehouseList) => {
       method: "GET"
     });
     const data = await response.json();
-
-    console.log("DATA");
-    console.log(data);
-
     const hasStockItems = data.results[0].records.some((rec) => {
       const repl = rec.REPL.toString().split(';');
-      console.log('repl');
-      console.log(repl);
+ 
       return repl[3] === '30' && warehouseList.includes(repl[2]);
     });
 
@@ -216,6 +197,30 @@ const getWarehouses = () => {
     });
 }
 
+// set desciption to ItemName which has UOM info
+const setProductDescriptionToItemName = () => {
+  let widgetInstance = window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"].instance;
+  const itno =window.location.pathname.split("/").pop();
+  const apiUrl = `/delegate/ecom-api/items/${itno}/attributes?size=-1`;
+
+  return fetch(apiUrl, { method: "GET" })
+    .then((res) => res.json())
+    .then(function (data) {
+
+      var obj = data.filter(obj=>obj.key==='PMDM.AT.ItemName');
+     const desc = obj[0].values[0];
+     const productDescription = $('.product-description')[0];
+     $(productDescription).text(desc);
+
+      return data;
+    })
+    .catch(function (error) {
+      console.log(`(error)->${error}`);
+      throw error;
+    });
+
+
+}
 
 moveStockText = () => {
   if ($(".inner-container").find(".stock-text").length > 0) {
