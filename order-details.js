@@ -24,7 +24,7 @@ const splitTrackingNumbers = () => {
 
                 // Append a new tracking link to the trackingLinks string
                 trackingLinks += `<div style="margin-top: 10px;">
-                   <a href="https://www.aaacooper.com/pwb/Dashboard.aspx?id=${trackingNumber}&PG=PickupNumber" target="_blank" class="link-primary tracking-number">${trackingNumber}
+                   <a href="https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}" target="_blank" class="link-primary tracking-number">${trackingNumber}
                        <svg class="icon external-link" focusable="false">
                            <use xlink:href="#external-link"></use>
                        </svg>
