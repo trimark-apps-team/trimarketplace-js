@@ -249,7 +249,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             });
         }
 
-        if(sessionStorage.getItem('triggerAbandonCart') == true) {
+        if(sessionStorage.getItem('triggerAbandonCart')) {
             sessionStorage.setItem('triggerAbandonCart', false)
             console.log('updating abandon cart trigger to false')
             $.ajax({
@@ -291,29 +291,36 @@ var intervalId = window.setInterval(function () {
     }
 }, 500);
 
-$(document).ready(function() {
-    if(sessionStorage.getItem('customerEmail') !== null) {
+
+var abandonCartInterval = window.setInterval(function() {
+    if(sessionStorage.getItem('checkout_items') !== null) {
         let customerEmail = sessionStorage.getItem('customerEmail');
         if(window.location.href.includes('qa')) {
             customerEmail = 'kevin.kindorf@trimarkusa.com'
         }
-        $.ajax({
-            url: `https://rhythm-hubspot-proxy.onrender.com/abandon-cart?email=${customerEmail}`,
-            type: 'patch',
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (data) {
-                sessionStorage.setItem('triggerAbandonCart', true)
-                
-            },
-            data: JSON.stringify({
-                "properties": {
-                    "rhythm_abandoned_cart": "true",
-                    "rhythm_abandoned_cart_total": sessionStorage.getItem('checkout_value'),
-                    "rhythm_cart_items": sessionStorage.getItem('checkout_items')
-                }
-            })
-        });
+        let sendCount = 0;
+        if(sendCount === 0) {
+            sendCount++;
+            $.ajax({
+                url: `https://rhythm-hubspot-proxy.onrender.com/abandon-cart?email=${customerEmail}`,
+                type: 'patch',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    sessionStorage.setItem('triggerAbandonCart', true)
+                    
+                },
+                data: JSON.stringify({
+                    "properties": {
+                        "rhythm_abandoned_cart": "true",
+                        "rhythm_abandoned_cart_total": sessionStorage.getItem('checkout_value'),
+                        "rhythm_cart_items": sessionStorage.getItem('checkout_items')
+                    }
+                })
+            });
+            clearInterval(abandonCartInterval)
+        }
+     
     }
 
-})
+}, 200)
