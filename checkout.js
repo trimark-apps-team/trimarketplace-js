@@ -242,7 +242,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                     "customProperties": {
                         "customerEmail": customerEmail,
                         "customerNumber": customerNumber,
-                        "cart_total": grandTotal,
+                        "cart_total": grandTotal.toFixed(2),
                         "cart": items
                     }
                 })
@@ -315,7 +315,7 @@ var abandonCartInterval = window.setInterval(function() {
                 data: JSON.stringify({
                     "properties": {
                         "rhythm_abandoned_cart": "true",
-                        "rhythm_abandoned_cart_total": sessionStorage.getItem('checkout_value'),
+                        "rhythm_abandoned_cart_total": parseFloat(sessionStorage.getItem('checkout_value')).toFixed(2),
                         "rhythm_cart_items": sessionStorage.getItem('checkout_items')
                     }
                 })
