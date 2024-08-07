@@ -212,7 +212,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
     if (checkoutConfirmation && window.location.href.includes('checkoutpage/confirmation')) {
         $(".thank-you-container").hide()
 
-        let items = JSON.parse(sessionStorage.getItem('checkout_items_hubspot'))
+        let items = sessionStorage.getItem('checkout_items_hubspot')
         let grandTotal = parseFloat($(".order-summary-component .total .amount").text().replace(/[^.0-9]/g, '')) || 0.00
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
