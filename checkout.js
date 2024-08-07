@@ -212,7 +212,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
     if (checkoutConfirmation && window.location.href.includes('checkoutpage/confirmation')) {
         $(".thank-you-container").hide()
 
-        let items = JSON.parse(sessionStorage.getItem('checkout_items'))
+        let items = JSON.parse(sessionStorage.getItem('checkout_items_hubspot'))
         let grandTotal = parseFloat($(".order-summary-component .total .amount").text().replace(/[^.0-9]/g, '')) || 0.00
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
@@ -293,8 +293,8 @@ var intervalId = window.setInterval(function () {
 
 
 var abandonCartInterval = window.setInterval(function() {
-    console.log(sessionStorage.getItem('checkout_items'))
-    if(sessionStorage.getItem('checkout_items')) {
+    
+    if(sessionStorage.getItem('checkout_items_hubspot')) {
         console.log('items set')
         let customerEmail = sessionStorage.getItem('customerEmail');
         if(window.location.href.includes('qa')) {
@@ -316,7 +316,7 @@ var abandonCartInterval = window.setInterval(function() {
                     "properties": {
                         "rhythm_abandoned_cart": "true",
                         "rhythm_abandoned_cart_total": parseFloat(sessionStorage.getItem('checkout_value')).toFixed(2),
-                        "rhythm_cart_items": sessionStorage.getItem('checkout_items')
+                        "rhythm_cart_items": sessionStorage.getItem('checkout_items_hubspot')
                     }
                 })
             });
