@@ -49,6 +49,7 @@ $(document).ready(function () {
     var hasEquipmentFalse = false;
     const equipShippingDiv = $('<div id="shipping-error" style="color:#A12641; padding-bottom:10px; font-weight:600;">Your order contains equipment and non-equipment items. Please go back to update cart .</div>');
     sessionStorage.removeItem('transactionalEmailSent')
+    sessionStorage.removeItem('triggerAbandonCart')
 
     // --------- MutationObserver ------------//
     const config = { childList: true, characterData: true, subtree: true, attributes: true };
@@ -224,13 +225,12 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         if(!sessionStorage.getItem('transactionalEmailSent')) {
             sessionStorage.setItem('transactionalEmailSent', true)
             $.ajax({
-                url: 'https://rhythm-hubspot-proxy.onrender.com/post-to-hubspot',
+                url: 'https://eba-rhythm.trimarketplace.com/post-to-hubspot',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (data) {
                     console.log('success');
-                    
                 },
                 data: JSON.stringify({
                     "emailId": "170878458282",
@@ -253,7 +253,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             sessionStorage.setItem('triggerAbandonCart', false)
             console.log('updating abandon cart trigger to false')
             $.ajax({
-                url: `https://rhythm-hubspot-proxy.onrender.com/abandon-cart?email=${customerEmail}`,
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
                 type: 'patch',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -293,7 +293,9 @@ var intervalId = window.setInterval(function () {
 
 
 var abandonCartInterval = window.setInterval(function() {
-    if(sessionStorage.getItem('checkout_items') !== null) {
+    console.log(sessionStorage.getItem('checkout_items'))
+    if(sessionStorage.getItem('checkout_items')) {
+        console.log('items set')
         let customerEmail = sessionStorage.getItem('customerEmail');
         if(window.location.href.includes('qa')) {
             customerEmail = 'kevin.kindorf@trimarkusa.com'
@@ -302,7 +304,7 @@ var abandonCartInterval = window.setInterval(function() {
         if(sendCount === 0) {
             sendCount++;
             $.ajax({
-                url: `https://rhythm-hubspot-proxy.onrender.com/abandon-cart?email=${customerEmail}`,
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
                 type: 'patch',
                 dataType: 'json',
                 contentType: 'application/json',
