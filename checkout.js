@@ -217,7 +217,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
         let customerNumber = sessionStorage.getItem('customerNumber')
-        if(window.location.href.includes("qa")) {
+        if(window.location.href.includes("qa.trimarketplace.com")) {
             salesEmail = "kevin.kindorf@trimarkusa.com"
             customerEmail = "kevin.kindorf@trimarkusa.com"
         }
@@ -297,7 +297,7 @@ var abandonCartInterval = window.setInterval(function() {
     if(sessionStorage.getItem('checkout_items_hubspot')) {
         console.log('items set')
         let customerEmail = sessionStorage.getItem('customerEmail');
-        if(window.location.href.includes('qa')) {
+        if(window.location.href.includes('qa.trimarketplace.com')) {
             customerEmail = 'kevin.kindorf@trimarkusa.com'
         }
         let sendCount = 0;
