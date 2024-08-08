@@ -83,12 +83,11 @@ getWarehouses()
 // Observer configuration and callback
 const config = { childList: true, characterData: false, subtree: true, attributes: false };
 const callback = function (mutationsList, observer) {
-    //updateProductDescription();
     setStatusColor();
     replaceLabels();
     addPrivateLabel();
     replaceNotInStock();
-    // addQuantityListener();
+    replaceErrorMessage();
 };
 
 $(document).ready(function () {
@@ -201,6 +200,13 @@ const replaceLabels = () => {
     var label = $("label:contains('Not used')");
     label.text("Non-Stock");
 }
+
+// Replace M3 error message
+const replaceErrorMessage = () => {
+    const errorMessage = $('.erp-failure-modal')[0];
+    console.log(errorMessage);
+}
+
 
 // Set status color based on URL path
 const setStatusColor = () => {
