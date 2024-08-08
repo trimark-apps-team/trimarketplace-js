@@ -48,6 +48,8 @@ $(document).ready(function () {
     var hasEquipmentTrue = false;
     var hasEquipmentFalse = false;
     const equipShippingDiv = $('<div id="shipping-error" style="color:#A12641; padding-bottom:10px; font-weight:600;">Your order contains equipment and non-equipment items. Please go back to update cart .</div>');
+    sessionStorage.removeItem('transactionalEmailSent')
+    sessionStorage.removeItem('triggerAbandonCart')
 
     // --------- MutationObserver ------------//
     const config = { childList: true, characterData: true, subtree: true, attributes: true };
@@ -203,17 +205,70 @@ $(document).ready(function () {
 });
 
 
-
-
 const fooObserver = new MutationObserver((_mutationList, observer) => {
-    const shippingStep = $('.checkout-container .checkout-container')
     const checkoutConfirmation = $('.checkout-container .confirmation-container')
     const reviewContainer = $(".checkout-container .review-container")
-    //if (shippingStep && window.location.href.includes('checkoutpage/deliverymethod')) {
-    // $(".thank-you-container").hide()
-    // }
+ 
     if (checkoutConfirmation && window.location.href.includes('checkoutpage/confirmation')) {
         $(".thank-you-container").hide()
+
+        let items = sessionStorage.getItem('checkout_items_hubspot')
+        let grandTotal = parseFloat($(".order-summary-component .total .amount").text().replace(/[^.0-9]/g, '')) || 0.00
+        let salesEmail = sessionStorage.getItem('salesEmail')
+        let customerEmail = sessionStorage.getItem('customerEmail')
+        let customerNumber = sessionStorage.getItem('customerNumber')
+        if(window.location.href.includes("qa.trimarketplace.com")) {
+            salesEmail = "kevin.kindorf@trimarkusa.com"
+            customerEmail = "kevin.kindorf@trimarkusa.com"
+        }
+      
+        if(!sessionStorage.getItem('transactionalEmailSent')) {
+            sessionStorage.setItem('transactionalEmailSent', true)
+            $.ajax({
+                url: 'https://eba-rhythm.trimarketplace.com/post-to-hubspot',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('success');
+                },
+                data: JSON.stringify({
+                    "emailId": "170878458282",
+                    "message": {
+                        "to": salesEmail,
+                        "from": "support@trimarkusa.com",
+                        "cc": ["demo_support@trimarkusa.com", "amanda.scott@trimarkusa.com"]
+                    },
+                    "customProperties": {
+                        "customerEmail": customerEmail,
+                        "customerNumber": customerNumber,
+                        "cart_total": grandTotal.toFixed(2),
+                        "cart": items
+                    }
+                })
+            });
+        }
+
+        if(sessionStorage.getItem('triggerAbandonCart')) {
+            sessionStorage.setItem('triggerAbandonCart', false)
+            console.log('updating abandon cart trigger to false')
+            $.ajax({
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                type: 'patch',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('abandon cart set to false')
+                    
+                },
+                data: JSON.stringify({
+                    "properties": {
+                        "rhythm_abandoned_cart": "false"
+                    }
+                })
+            });
+        }
+        
     }
     if (reviewContainer && window.location.href.includes('checkoutpage/review')) {
         $(".thank-you-container").show()
@@ -223,3 +278,51 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
 });
 
 fooObserver.observe(document.body, { childList: true, subtree: true });
+
+var intervalId = window.setInterval(function () {
+    const checkoutConfirmationPage = $('.checkout-container .confirmation-container')
+    if (checkoutConfirmationPage.length) {
+        let appendCount = 0;
+        if (appendCount === 0) {
+            $('.confirmation-container .title.confirmation').append($(".confirmation-survey").show())
+            appendCount++;
+            clearInterval(intervalId)
+        }
+    }
+}, 500);
+
+
+var abandonCartInterval = window.setInterval(function() {
+    
+    if(sessionStorage.getItem('checkout_items_hubspot')) {
+        console.log('items set')
+        let customerEmail = sessionStorage.getItem('customerEmail');
+        if(window.location.href.includes('qa.trimarketplace.com')) {
+            customerEmail = 'kevin.kindorf@trimarkusa.com'
+        }
+        let sendCount = 0;
+        if(sendCount === 0) {
+            sendCount++;
+            $.ajax({
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                type: 'patch',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    sessionStorage.setItem('triggerAbandonCart', true)
+                    
+                },
+                data: JSON.stringify({
+                    "properties": {
+                        "rhythm_abandoned_cart": "true",
+                        "rhythm_abandoned_cart_total": parseFloat(sessionStorage.getItem('checkout_value')).toFixed(2),
+                        "rhythm_cart_items": sessionStorage.getItem('checkout_items_hubspot')
+                    }
+                })
+            });
+            clearInterval(abandonCartInterval)
+        }
+     
+    }
+
+}, 200)
