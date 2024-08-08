@@ -161,7 +161,7 @@ addQuantityListener = () => {
 
 const isNonStock = async (itno, warehouseList) => {
   const g_EXPORTMI_MITBAL = '/o/generic-api/EXPORTMI_MITBAL?qery=';
-  let querystr = `MBCONO,MBITNO,MBWHLO,MBIPLA[ ]from[ ]MITBAL[ ]where[ ]MBCONO[ ]=[ ]200[ ]and[ ]MBITNO[ ]=[ ][']${itno}[']`;
+  let querystr = `MBCONO,MBITNO,MBWHLO,MBIPLA,MBOPLC[ ]from[ ]MITBAL[ ]where[ ]MBCONO[ ]=[ ]200[ ]and[ ]MBITNO[ ]=[ ][']${itno}[']`;
 
   let apiurl = g_EXPORTMI_MITBAL + querystr;
 
@@ -173,7 +173,7 @@ const isNonStock = async (itno, warehouseList) => {
     const hasStockItems = data.results[0].records.some((rec) => {
       const repl = rec.REPL.toString().split(';');
  
-      return repl[3] === '30' && warehouseList.includes(repl[2]);
+      return repl[4] === '1' && warehouseList.includes(repl[2]);
     });
 
     return !hasStockItems;
