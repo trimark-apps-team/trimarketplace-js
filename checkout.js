@@ -268,6 +268,26 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                 })
             });
         }
+
+        if(sessionStorage.getItem('triggerPendingApproval')) {
+            sessionStorage.setItem('triggerPendingApproval', false)
+            console.log('updating pending aprroval trigger to false')
+            $.ajax({
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                type: 'patch',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('trigger appending approval set to false')
+                    
+                },
+                data: JSON.stringify({
+                    "properties": {
+                        "rhythm_pending_approval": "false"
+                    }
+                })
+            });
+        }
         
     }
     if (reviewContainer && window.location.href.includes('checkoutpage/review')) {
