@@ -8,7 +8,6 @@ $(window).on('load', function () {
     setTimeout(setStatusColor, 0);
     //setTimeout(setStatusColor, 1000 );
     //setTimeout(setStatusColor, 2000 );
-
     $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
         console.log(data.orderForApprovalResponse)
         let approvalResponseList = data.orderForApprovalResponse;
@@ -37,7 +36,7 @@ $(window).on('load', function () {
                         },
                         data: JSON.stringify({
                             "properties": {
-                                "rhythm_pending_approval": "true"
+                                "rhythm_approver_notify": "true"
                             }
                         })
                     });
@@ -49,6 +48,8 @@ $(window).on('load', function () {
 
         }
     });
+
+
 
 
 });
@@ -68,4 +69,6 @@ setStatusColor = () => {
         }
     });
 }
+
+
 
