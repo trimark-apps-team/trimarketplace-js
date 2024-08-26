@@ -36,6 +36,7 @@ $(window).on('load', function () {
                         },
                         data: JSON.stringify({
                             "properties": {
+                                
                                 "rhythm_approver_notify": "true"
                             }
                         })
