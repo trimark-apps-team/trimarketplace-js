@@ -9,46 +9,46 @@ $(window).on('load', function () {
     //setTimeout(setStatusColor, 1000 );
     //setTimeout(setStatusColor, 2000 );
 
-    // $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
-    //     console.log(data.orderForApprovalResponse)
-    //     let approvalResponseList = data.orderForApprovalResponse;
-    //     if(approvalResponseList.length) {
-    //         console.log(approvalResponseList)
-    //         let hasPendingApproval = false;
-    //         for(var i = 0; i < approvalResponseList.length; i++) {
-    //             let approval = approvalResponseList[i]
-    //             if(approval.approveStatus === "Pending") {
-    //                 hasPendingApproval = true;
+    $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
+        console.log(data.orderForApprovalResponse)
+        let approvalResponseList = data.orderForApprovalResponse;
+        if(approvalResponseList.length) {
+            console.log(approvalResponseList)
+            let hasPendingApproval = false;
+            for(var i = 0; i < approvalResponseList.length; i++) {
+                let approval = approvalResponseList[i]
+                if(approval.approveStatus === "Pending") {
+                    hasPendingApproval = true;
                     
-    //             }
-    //             if (approvalResponseList.length - 1 === i && hasPendingApproval) {
-    //                 let customerEmail = sessionStorage.getItem('customerEmail');
-    //                 if(window.location.href.includes('qa.trimarketplace.com')) {
-    //                     customerEmail = 'kevin.kindorf@trimarkusa.com'
-    //                 }
-    //                 $.ajax({
-    //                     url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
-    //                     type: 'patch',
-    //                     dataType: 'json',
-    //                     contentType: 'application/json',
-    //                     success: function (data) {
-    //                         sessionStorage.setItem('triggerPendingApproval', true)
+                }
+                if (approvalResponseList.length - 1 === i && hasPendingApproval) {
+                    let customerEmail = sessionStorage.getItem('customerEmail');
+                    if(window.location.href.includes('qa.trimarketplace.com')) {
+                        customerEmail = 'kevin.kindorf@trimarkusa.com'
+                    }
+                    $.ajax({
+                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                        type: 'patch',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            sessionStorage.setItem('triggerPendingApproval', true)
                             
-    //                     },
-    //                     data: JSON.stringify({
-    //                         "properties": {
-    //                             "rhythm_pending_approval": "true"
-    //                         }
-    //                     })
-    //                 });
-    //             }
+                        },
+                        data: JSON.stringify({
+                            "properties": {
+                                "rhythm_pending_approval": "true"
+                            }
+                        })
+                    });
+                }
 
-    //         }
+            }
 
             
 
-    //     }
-    // });
+        }
+    });
 
 
 });
