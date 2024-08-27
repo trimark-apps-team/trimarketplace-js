@@ -269,8 +269,8 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             });
         }
 
-        if(sessionStorage.getItem('triggerPendingApproval')) {
-            sessionStorage.setItem('triggerPendingApproval', false)
+        if(sessionStorage.getItem('triggerPendingApproval') === 'true') {
+            sessionStorage.setItem('triggerPendingApproval', 'false')
             console.log('updating approver notify to false')
             $.ajax({
                 url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
