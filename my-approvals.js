@@ -35,22 +35,47 @@ setStatusColor = () => {
 
 
 const checkPendingApprovals = () => {
-    $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
+ $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
         console.log(data.orderForApprovalResponse)
+        let customerEmail = sessionStorage.getItem('customerEmail');
+        if(window.location.href.includes('qa.trimarketplace.com')) {
+            customerEmail = 'kevin.kindorf@trimarkusa.com'
+        }
         let approvalResponseList = data.orderForApprovalResponse;
         // declare this as a string with valuje of false since hubspot properties need value to be string
         let hasPendingApproval = "false";
-        if(approvalResponseList.length) {
+        if(approvalResponseList) {
             console.log(approvalResponseList)
-            
-            for(var i = 0; i < approvalResponseList.length; i++) {
-                let approval = approvalResponseList[i]
-                if(approval.approveStatus === "Pending") {
-                    //change to "true" if there is a pending approval
-                    hasPendingApproval = "true";
-                    
+            // responselist array is empty always set notify flag to false
+            if(approvalResponseList.length === 0) {
+                console.log('approval list is empty set notify flag to false')
+                $.ajax({
+                    url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                    type: 'patch',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        sessionStorage.setItem('triggerPendingApproval', 'false')
+                        sessionStorage.setItem('pendingApprovalCount', approvalResponseList.length)
+                        hasPendingApproval = "false";
+                    },
+                    data: JSON.stringify({
+                        "properties": {
+                            "rhythm_approver_notify": 'false'
+                        }
+                    })
+                });
+            }
+            else if(approvalResponseList.length > 0) {
+                for(var i = 0; i < approvalResponseList.length; i++) {
+                    let approval = approvalResponseList[i]
+                    if(approval.approveStatus === "Pending"){
+                        hasPendingApproval = "true";
+                        break;
+                    }
+                   
                 }
-                if (approvalResponseList.length - 1 === i) {
+                if (hasPendingApproval === 'true') {
                     let customerEmail = sessionStorage.getItem('customerEmail');
                     if(window.location.href.includes('qa.trimarketplace.com')) {
                         customerEmail = 'kevin.kindorf@trimarkusa.com'
@@ -61,18 +86,21 @@ const checkPendingApprovals = () => {
                         dataType: 'json',
                         contentType: 'application/json',
                         success: function (data) {
-                            sessionStorage.setItem('triggerPendingApproval', hasPendingApproval)
-                            
+                            sessionStorage.setItem('triggerPendingApproval', 'true')
+                            sessionStorage.setItem('pendingApprovalCount', approvalResponseList.length)
+                            hasPendingApproval = "false";
                         },
                         data: JSON.stringify({
                             "properties": {
-                                "rhythm_approver_notify": hasPendingApproval
+                                "rhythm_approver_notify": 'true'
                             }
                         })
                     });
                 }
             }
+            
         }
+        
     });
 }
 
@@ -85,10 +113,15 @@ const approvalObserver = new MutationObserver(() => {
     if (rejectOrderTitle.text() === "Reject Order") {
         $(proceedToReject).unbind().click(function() {
             console.log('approver has rejected order')
-            checkPendingApprovals();
+            setTimeout(() => {
+                checkPendingApprovals();
+              }, 500);
+            
         })
     }
-
 });
 
 approvalObserver.observe(document.body, { childList: true, subtree: true });
+
+
+

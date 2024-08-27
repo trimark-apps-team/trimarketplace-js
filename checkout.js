@@ -269,7 +269,11 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             });
         }
 
-        if(sessionStorage.getItem('triggerPendingApproval') === 'true') {
+        // only set notify flag to false after completing checkout if pendingApprovalCount is 0. which means the approver 
+        // has no more pending approvals. By doing this, if the approver still has pending orders, they will
+        // still receive the pending approvals email that was triggered on the approvals page.
+        if(sessionStorage.getItem('pendingApprovalCount') === 0) {
+            console.log('pending approval total is ' + sessionStorage.getItem('pendingApprovalCount'))
             sessionStorage.setItem('triggerPendingApproval', 'false')
             console.log('updating approver notify to false')
             $.ajax({
