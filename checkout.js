@@ -269,10 +269,11 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             });
         }
 
-        // only set notify flag to false after completing checkout if pendingApprovalCount is 0. which means the approver 
-        // has no more pending approvals. By doing this, if the approver still has pending orders, they will
-        // still receive the pending approvals email that was triggered on the approvals page.
-        if(sessionStorage.getItem('pendingApprovalCount') === 0) {
+        // only set notify flag to false after completing checkout if pendingApprovalCount is equal to last or none. Last means
+        // the approver has successfully approved the last pending order in their last for the end user. None means when the
+        // approver visited the approvals page and no orders were pending then they have no orders in their list pending so set 
+        // notify flag to false 
+        if(sessionStorage.getItem('pendingApprovalCount') === 'none' || sessionStorage.getItem('pendingApprovalCount') === 'last') {
             console.log('pending approval total is ' + sessionStorage.getItem('pendingApprovalCount'))
             sessionStorage.setItem('triggerPendingApproval', 'false')
             console.log('updating approver notify to false')

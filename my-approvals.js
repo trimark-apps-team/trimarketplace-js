@@ -57,7 +57,7 @@ const checkPendingApprovals = () => {
                     contentType: 'application/json',
                     success: function (data) {
                         sessionStorage.setItem('triggerPendingApproval', 'false')
-                        sessionStorage.setItem('pendingApprovalCount', approvalResponseList.length)
+                        sessionStorage.setItem('pendingApprovalCount', 'none')
                         hasPendingApproval = "false";
                     },
                     data: JSON.stringify({
@@ -67,7 +67,43 @@ const checkPendingApprovals = () => {
                     })
                 });
             }
-            else if(approvalResponseList.length > 0) {
+
+            // if approval response list is a length of one, check if its pending
+            // and set notify to true if approval is pending and pendingApprovalCount to last
+            else if(approvalResponseList.length === 1) {
+                for(var i = 0; i < approvalResponseList.length; i++) {
+                    let approval = approvalResponseList[i]
+                    if(approval.approveStatus === "Pending"){
+                        hasPendingApproval = "true";
+                        break;
+                    }
+                   
+                }
+                if (hasPendingApproval === 'true') {
+                    let customerEmail = sessionStorage.getItem('customerEmail');
+                    if(window.location.href.includes('qa.trimarketplace.com')) {
+                        customerEmail = 'kevin.kindorf@trimarkusa.com'
+                    }
+                    $.ajax({
+                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                        type: 'patch',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            sessionStorage.setItem('triggerPendingApproval', 'true')
+                            sessionStorage.setItem('pendingApprovalCount', 'last')
+                            hasPendingApproval = "false";
+                        },
+                        data: JSON.stringify({
+                            "properties": {
+                                "rhythm_approver_notify": 'true'
+                            }
+                        })
+                    });
+                }
+            }
+
+            else if(approvalResponseList.length > 1) {
                 for(var i = 0; i < approvalResponseList.length; i++) {
                     let approval = approvalResponseList[i]
                     if(approval.approveStatus === "Pending"){
