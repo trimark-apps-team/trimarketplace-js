@@ -37,7 +37,6 @@ const setErrorMessage = () => {
             $(errorMessageTopBar).text("Unable to process this order. Please contact your Sales Representative for more information.");
             $(refreshMessage).text("");
             const refreshButton = $(".refresh-button");
-            console.log(refreshButton);
             if (refreshButton) {
                 refreshButton.hide();
 
@@ -47,7 +46,7 @@ const setErrorMessage = () => {
             }
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
     }
 }
  
