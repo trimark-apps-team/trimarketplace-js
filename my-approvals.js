@@ -4,6 +4,7 @@ $(window).on('load', function () {
     // remove these session storage values initially when visiting page.
     sessionStorage.removeItem('has_pending_approval')
     sessionStorage.removeItem('triggerPendingApproval')
+    sessionStorage.removeItem('pendingApprovalCount')
     
     let rejectButton = $(".reject-btn");
     setTimeout(setStatusColor, 0);
