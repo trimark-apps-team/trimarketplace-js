@@ -157,6 +157,7 @@ $('document').ready(function () {
   // remove the session storage items on initial page ready so we can reset
   sessionStorage.removeItem('customerEmail')
   sessionStorage.removeItem('salesEmail')
+  sessionStorage.removeItem('companyName')
   dspSaleInfo()
 
   // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
@@ -212,6 +213,7 @@ function submitHSForm(hsFormURL, data) {
   $.get("/delegate/ecom-api/users/current", function (data) {
     sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber)
     sessionStorage.setItem('customerEmail', data.email)
+    sessionStorage.setItem('companyName', data.activeUserGroup.name)
   });
 
 
