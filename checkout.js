@@ -242,6 +242,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
         let salesEmail = sessionStorage.getItem('salesEmail')
         let customerEmail = sessionStorage.getItem('customerEmail')
         let customerNumber = sessionStorage.getItem('customerNumber')
+        let companyName = sessionStorage.getItem('companyName')
         if(window.location.href.includes("qa.trimarketplace.com")) {
             salesEmail = "kevin.kindorf@trimarkusa.com"
             customerEmail = "kevin.kindorf@trimarkusa.com"
@@ -267,6 +268,7 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
                     "customProperties": {
                         "customerEmail": customerEmail,
                         "customerNumber": customerNumber,
+                        "companyName": companyName, 
                         "cart_total": grandTotal.toFixed(2),
                         "cart": items
                     }
