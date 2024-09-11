@@ -158,6 +158,7 @@ $('document').ready(function () {
   sessionStorage.removeItem('customerEmail')
   sessionStorage.removeItem('salesEmail')
   sessionStorage.removeItem('companyName')
+  sessionStorage.removeItem('companyNumber')
   dspSaleInfo()
 
   // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
@@ -177,10 +178,14 @@ hsContext.pageName = document.title;
 return hsContext
 }
 
-function prepareHSFormSubmission() {
+function prepareHSFormSubmission(customerName, customerNumber) {
 var submissionData = new Object()
 submissionData.submittedAt = Date.now()
-submissionData.fields = [{"name":"email","value": Liferay.ThemeDisplay.getUserEmailAddress()}]
+submissionData.fields = [
+  {"name":"email","value": Liferay.ThemeDisplay.getUserEmailAddress()}, 
+  {"name":"customer_name","value": customerName},
+  {"name":"customer_number","value": customerNumber}
+]
 submissionData.context = buildHSContext()
 return submissionData
 }
@@ -233,8 +238,12 @@ function submitHSForm(hsFormURL, data) {
       submitURL = `${baseSubmitURL}/${prodPortalId}/${prodFormGuid}`
     }
     
-    var formData = prepareHSFormSubmission();
-    submitHSForm(submitURL, formData)
+
+    setTimeout(function() {
+      var formData = prepareHSFormSubmission(sessionStorage.getItem('customerName'), sessionStorage.getItem('customerNumber'));
+      submitHSForm(submitURL, formData)
+    }, 300)
+    
 
 
 });
