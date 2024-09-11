@@ -241,7 +241,6 @@ function submitHSForm(hsFormURL, data) {
 
     setTimeout(function() {
       var formData = prepareHSFormSubmission(sessionStorage.getItem('companyName'), sessionStorage.getItem('customerNumber'));
-      console.log(formData)
       submitHSForm(submitURL, formData)
     }, 300)
     
