@@ -183,8 +183,8 @@ var submissionData = new Object()
 submissionData.submittedAt = Date.now()
 submissionData.fields = [
   {"name":"email","value": Liferay.ThemeDisplay.getUserEmailAddress()}, 
-  {"name":"customer_name","value": customerName},
-  {"name":"customer_number","value": customerNumber}
+  {"name":"rhythm_company_name","value": customerName},
+  {"name":"rhythm_company_number","value": customerNumber}
 ]
 submissionData.context = buildHSContext()
 return submissionData
@@ -240,7 +240,7 @@ function submitHSForm(hsFormURL, data) {
     
 
     setTimeout(function() {
-      var formData = prepareHSFormSubmission(sessionStorage.getItem('customerName'), sessionStorage.getItem('customerNumber'));
+      var formData = prepareHSFormSubmission(sessionStorage.getItem('companyName'), sessionStorage.getItem('customerNumber'));
       console.log(formData)
       submitHSForm(submitURL, formData)
     }, 300)
@@ -248,10 +248,10 @@ function submitHSForm(hsFormURL, data) {
 
 
 });
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-// ===========================================================
-// ===========================================================
-// END OF Display salesperson information
-// ===========================================================
-// ===========================================================
+
+//====================================================
+//====================================================
+// my account page js from trimarketplace-js
+//================================================
+//====================================================
