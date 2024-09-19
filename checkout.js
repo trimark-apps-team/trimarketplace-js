@@ -296,25 +296,30 @@ const fooObserver = new MutationObserver((_mutationList, observer) => {
             });
         }
 
-        // if(sessionStorage.getItem('triggerPendingApproval')) {
-        //     sessionStorage.setItem('triggerPendingApproval', false)
-        //     console.log('updating pending aprroval trigger to false')
-        //     $.ajax({
-        //         url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
-        //         type: 'patch',
-        //         dataType: 'json',
-        //         contentType: 'application/json',
-        //         success: function (data) {
-        //             console.log('trigger appending approval set to false')
+        // only set notify flag to false after completing checkout if pendingApprovalCount is equal to last or none. Last means
+        // the approver has successfully approved the last pending order in their last for the end user. None means when the
+        // approver visited the approvals page and no orders were pending then they have no orders in their list pending so set 
+        // notify flag to false 
+        if(sessionStorage.getItem('pendingApprovalCount') === 'none' || sessionStorage.getItem('pendingApprovalCount') === 'last') {
+            console.log('pending approval total is ' + sessionStorage.getItem('pendingApprovalCount'))
+            sessionStorage.setItem('triggerPendingApproval', 'false')
+            console.log('updating approver notify to false')
+            $.ajax({
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                type: 'patch',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('trigger approver notify set to false')
                     
-        //         },
-        //         data: JSON.stringify({
-        //             "properties": {
-        //                 "rhythm_pending_approval": "false"
-        //             }
-        //         })
-        //     });
-        // }
+                },
+                data: JSON.stringify({
+                    "properties": {
+                        "rhythm_approver_notify": "false"
+                    }
+                })
+            });
+        }
         
     }
     if (reviewContainer && window.location.href.includes('checkoutpage/review')) {
