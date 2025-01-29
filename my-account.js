@@ -68,7 +68,6 @@ function dspSaleInfo() {
     })
       .then((res) => res.json())		//  convert response to json
       .then(function (data) {
-
         if (data.nrOfSuccessfullTransactions > 0) {
           smcd = data.results[0].records[0].SMCD;
 
@@ -110,12 +109,13 @@ function getSalesmanDetail(smcd) {
   // call m3 api to get salesman detail
   let apiurl = g_mns150_GetUserData + smcd;
 
+
   fetch(apiurl, {
     method: "GET"
   })
     .then((res) => res.json())		//  convert response to json
     .then(function (data) {
-
+      sessionStorage.setItem('salesEmail', data.results[0].records[0].EMAL)
       if (data.nrOfSuccessfullTransactions > 0) {
         let sname = data.results[0].records[0].NAME;
         let semail = data.results[0].records[0].EMAL;
@@ -154,8 +154,86 @@ function getSalesmanDetail(smcd) {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Initialization
 $('document').ready(function () {
-
+  // remove the session storage items on initial page ready so we can reset
+  sessionStorage.removeItem('customerEmail')
+  sessionStorage.removeItem('salesEmail')
   dspSaleInfo()
+
+  // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+// begin post to hubspot forms api after successful login so we can capture the user as a contact in hubspot. 
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+      if (parts.length == 2){
+          return parts.pop().split(";").shift();
+      }     
+};
+function buildHSContext() {
+let hsContext = new Object()
+hsContext.hutk = getCookie('hubspotutk');
+hsContext.pageUri = window.location.href;
+hsContext.pageName = document.title;
+return hsContext
+}
+
+function prepareHSFormSubmission() {
+var submissionData = new Object()
+submissionData.submittedAt = Date.now()
+submissionData.fields = [{"name":"email","value": Liferay.ThemeDisplay.getUserEmailAddress()}]
+submissionData.context = buildHSContext()
+return submissionData
+}
+
+async function postData(url = '', data = {}) {
+// Default options are marked with *
+const response = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+        'Content-Type': 'application/json'
+         // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+return response.json() // parses JSON response into native JS objects
+}
+
+function submitHSForm(hsFormURL, data) {
+  postData(hsFormURL, data).then(data => {
+      if(data){
+          console.log(data)
+      }  
+  });
+}
+  $.get("/delegate/ecom-api/users/current", function (data) {
+    sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber)
+    sessionStorage.setItem('customerEmail', data.email)
+  });
+
+
+
+
+  var baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit'
+  var prodPortalId = '9416274'
+  var qaPortalId = '20922853'
+    // Add the HubSpot form GUID from your HubSpot portal
+    var prodFormGuid = '9c4843e5-fa59-4d69-a685-39655fa05a50' 
+    var qaformGuid = '2cfec285-66e3-4121-b71b-e4c0bde110db' 
+    var submitURL = ''
+    if(window.location.href.includes('qa.')) {
+      submitURL = `${baseSubmitURL}/${qaPortalId}/${qaformGuid}`
+    }
+    else if(window.location.href.includes('shop.')) {
+      submitURL = `${baseSubmitURL}/${prodPortalId}/${prodFormGuid}`
+    }
+    
+    var formData = prepareHSFormSubmission();
+    submitHSForm(submitURL, formData)
+
 
 });
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
