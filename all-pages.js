@@ -775,107 +775,204 @@ $('document').ready(function () {
 // ===========================================================
 
 //--------------------------------------------------
-function orderFooterLinks(title) {
-    let taxonomy = [];
-    taxonomy.push({ title: 'faq-contact-us', sortId: 1, level: 'primary' });
-    taxonomy.push({ title: 'helpcenter', sortId: 2, level: 'primary' });
-    taxonomy.push({ title: 'mycatalog', sortId: 2, level: 'primary' });
-    taxonomy.push({ title: 'services', sortId: 3, level: 'primary' });
-    taxonomy.push({ title: 'about-us', sortId: 4, level: 'primary' });
-    taxonomy.push({ title: 'trimark-usa-locations', sortId: 5, level: 'primary' });
-    taxonomy.push({ title: 'careers', sortId: 6, level: 'primary' });
+document.addEventListener("DOMContentLoaded", function () {
+    let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
+    const footerHTML = `<footer id="global-trimarkusa-footer">
+  <div class="footer-top">
+    <div class="footer-top-body">
+      <div class="contact-banner">
+        <div class="logo">
+          <a href="/" aria-label="TriMark Home">
+             <img width="170" src="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png" alt="TriMark" />  
+          </a>
+        </div>
+         <a href="tel:8882885346" class="phone">
+         <i class="fa fa-phone"></i> (888) 288-5346
+        </a>
+         <div class="email"><i class="fa fa-envelope"></i>
+           <a href="mailto:support@trimarketplace.com">support@trimarketplace.com</a>
+        </div>
+         <nav class="social">
+           <ul>
+              <li class="social-icon">
+               <a href="https://www.facebook.com/TrimarkUSA" class="social-media-link" aria-label="link facebook" target="_new">
+  <svg class="icon facebook">
+    <use xlink:href="#facebook"></use>
+  </svg>
+</a>
+               </li>
+              <li class="social-icon">
+                  <a href="https://twitter.com/TriMarkUSA" class="social-media-link" aria-label="link twitter" target="_new">
+  <svg class="icon twitter">
+    <use xlink:href="#twitter"></use>
+  </svg>
+</a>
+               
+             </li>
+               <li class="social-icon">
+                <a href=" http://linkedin.com/company/trimarkusa/" class="social-media-link" aria-label="link linkedin" target="_new">
+  <svg class="icon linkedin">
+    <use xlink:href="#linkedin"></use>
+  </svg>
+</a>
+                
+             </li>
+               <li class="social-icon"> 
+                <a href="https://www.youtube.com/channel/UC-_N3m1fOpMpdFTldZyKMvA" class="social-media-link" aria-label="link youtube" target="_new">
+  <svg class="icon youtube">
+    <use xlink:href="#youtube"></use>
+  </svg>
+</a>
+               
+       
+               <li class="social-icon">
+                 <a href="https://www.instagram.com/trimarkusa/" class="social-media-link" aria-label="link instagram" target="_new">
+  <svg class="icon instagram">
+    <use xlink:href="#instagram"></use>
+  </svg>
+</a>
+                 
+             </li>
+              <li class="social-icon">
+                <a href="https://www.pinterest.com/TriMarkUSA/" class="social-media-link" aria-label="link pinterest" target="_new">
+  <svg class="icon pinterest">
+    <use xlink:href="#pinterest"></use>
+  </svg>
+</a>
+        
+             </li>
+             
+             
+           </ul>
+     
+        </nav>
+      </div>
+      <div class="link-wrapper">
+        <div class="link-columns">
+          
+         
+          <nav class="link-column">
+            
+            <p class="column-head">
+             Company
+            </p>
+            
+            
+              <ul>
+                
+                 <li class="link">
+                   <a href="${domain}/about-us">
+                      About Us
+                   </a>
+                   
+                </li>
+                
+                 <li class="link">
+                   <a href="${domain}/trimark-usa-locations">
+                      Locations
+                   </a>
+                   
+                </li>
+                
+               
+                
+                 
+                
+                 <li class="link">
+                   <a href="https://support.trimarketplace.com/en/knowledge" target="_blank">
+                      FAQs
+                   </a>
+                   
+                </li>
+                
+              </ul>
+            
+          </nav>
+          
+         
+          <nav class="link-column">
+            
+            <p class="column-head">
+             Legal
+            </p>
+              <ul>
+              <li class="link">
+                   <a href="${domain}/terms-use">
+                      Terms of Use
+                   </a>
+                </li>
+                <li class="link">
+                   <a href="${domain}/code-of-business-ethics-and-conduct">
+                      Code of Business Ethics and Conduct
+                   </a>
+                </li>
 
-    var pageMatch = {};
-    var match = taxonomy.map(page => {
-        if (title === page.title) {
-            pageMatch = page;
-        }
-    });
-    return pageMatch;
-}
+                <li class="link">
+                   <a href="${domain}/privacy-policy">
+                      Privacy Policy
+                   </a>
+                </li>
+                 <li class="link">
+                   <a href="${domain}/ca-privacy">
+                      California Privacy Notice
+                   </a>
+                </li>
+                <li class="link">
+                   <a href="https://share.hsforms.com/1RBt11_loTpOgohP2SdzKxQ5ltn6">
+                      Do Not Sell My Personal Information
+                   </a>
+                </li>
+                 <li class="link">
+                   <a href="${domain}/terms-of-sale">
+                      Terms of Sale
+                   </a>
+                </li>
+                <li class="link">
+                  <a href="${domain}/return-policy">
+                      Return Policy
+                   </a>
+                </li>
+                <li class="link">
+                   <a href="${domain}/trimark-usa-trademarks">
+                      TriMark USA Trademarks
+                   </a>
+                </li>
+                <li class="link">
+                   <a href="${domain}/supplier-code-of-conduct">
+                      Supplier Code of Conduct
+                   </a>
+                </li>
+              </ul>
+          </nav> 
+        </div>
+       
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-wrapper">
+      <address class="address">
+        TriMark USA, LLC, 9 Hampshire Street, Mansfield, MA 02048
+      </address>
+      <p class="copyright">
+        Copyright © 2025, All Rights Reserved
+      </p>
+    </div>
+  </div>
+</footer>`;
 
-function getFooterLinks() {
-    // --- Get footer links ---
-    var footerMenuArray = [];
-    listItems = $(".dynamic-menu-footer ul li").find("a").each(function (i) {
-        let menuItem = {};
-        var page = $(this)[0];
-        menuItem.href = $(page).attr('href');
-        menuItem.title = $(page)[0].innerText;
-        footerMenuArray.push(menuItem);
-        var str = menuItem.href.replace(window.origin + "/", "");
-
-        if (Object.keys(orderFooterLinks(str)).length) {
-            menuItem.sortId = orderFooterLinks(str).sortId;
-            menuItem.level = orderFooterLinks(str).level;
-        } else {
-            menuItem.sortId = 0;
-            menuItem.level = 'secondary';
-        }
-    });
-    return footerMenuArray;
-}
-
-getSortedLinks = (level, links) => {
-    return links.filter(page => {
-        return page.level === level
-    }).sort((a, b) => a.sortId - b.sortId);
-}
-
-setFooterHtml = (links) => {
-    footerHtml = $('<div id="tm-footer"><div id="logo"><!-- logo --></div><div id="primary-links"><!-- primary --></div><div id="secondary-links"><!-- secondary --></div><div id="social-media"><!-- primary --></div><div id="tm-address"><!-- address--></div><div id="copyright"><!-- copyright --></div></div>');
-    footerHtml.prependTo($('.dynamic-menu-footer'));
-
-    primaryLinks = getSortedLinks('primary', links);
-    secondaryLinks = getSortedLinks('secondary', links);
-
-    primaryHtml = '';
-    secondaryHtml = '';
-    primaryLinks.map(link => {
-        primaryHtml += `<div class="primary-link-cell"><a href=${link.href}>${link.title}</a></div>`;
-    });
-
-    secondaryLinks.map(link => {
-        secondaryHtml += `<div class="secondary-link-cell"><a href=${link.href} target="_blank">${link.title}</a> </div> | `;
-    });
-
-    socialMedia = $('.footer-social-media-wrapper')[0];
-
-    // add target to open sm in new window
-    $('.social-media-link').attr('target', '_new');
-
-    address = '<span>TriMark USA LLC</span><span>9 Hampshire Street</span><span>Mansfield, MA 02048</span><span>P: 888.288.5346</span>';
-    copyright = '<span>Copyright &copy; 2024  TriMark. All Rights Reserved.</span>';
-
-    logoImg = '<a href=https://www.trimarkusa.com><img src="https://shop.trimarketplace.com/documents/24337183/24339947/trimark-logo-232.png" /></a>';
-
-    // insert footer elements one at a time
-    $(logoImg).prependTo($('.dynamic-menu-footer #logo'));
-    $(primaryHtml).prependTo($('#primary-links'));
-    $(secondaryHtml).prependTo($('#secondary-links'));
-    $(socialMedia).prependTo($('#social-media'));
-    $(address).prependTo($('#tm-address'));
-    $(copyright).prependTo($('#copyright'));
-}
-
+    const mainContent = document.querySelector("main#content");
+    if (mainContent) {
+        mainContent.insertAdjacentHTML("afterend", footerHTML);
+    }
+});
 // ===========================================================
 // ===========================================================
 // END OF Set customer footer area for all pages
 // ===========================================================
 // ===========================================================
 
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// Page Initialization
-$('document').ready(function () {
 
-    setTimeout(function () {
-        setFooterHtml(getFooterLinks());
-    }, 500);
-
-    // Construct and show global footer
-
-});
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 
 // add white logo to banner
