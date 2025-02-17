@@ -961,7 +961,22 @@ $('document').ready(function() {
         </div>
       </div>
     </footer>`;
-     document.body.insertAdjacentHTML("beforeend", footerHTML);
+
+          // Function to observe DOM changes
+    const footerObserver = new MutationObserver((mutationsList, footerObserver) => {
+        const mainContent = document.querySelector("main#content");
+        if (mainContent) {
+            // When <main id="content"> is available, insert the footer after it
+            mainContent.insertAdjacentHTML("afterend", footerHTML);
+            footerObserver.disconnect();  // Stop observing after insertion
+        }
+    });
+
+    // Start observing the DOM for changes to the document body
+    footerObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+    });
    
 })
 
