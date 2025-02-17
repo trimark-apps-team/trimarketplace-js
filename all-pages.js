@@ -962,12 +962,14 @@ $('document').ready(function() {
       </div>
     </footer>`;
 
-          // Function to observe DOM changes
+    // Function to observe DOM changes
     const footerObserver = new MutationObserver((mutationsList, footerObserver) => {
         const mainContent = document.querySelector("main#content");
         if (mainContent) {
-            // When <main id="content"> is available, insert the footer after it
-            mainContent.insertAdjacentHTML("afterend", footerHTML);
+            // Check if the footer already exists before inserting it
+            if (!document.querySelector('#global-trimarkusa-footer')) {
+                mainContent.insertAdjacentHTML("afterend", footerHTML);
+            }
             footerObserver.disconnect();  // Stop observing after insertion
         }
     });
@@ -977,7 +979,7 @@ $('document').ready(function() {
         childList: true,
         subtree: true,
     });
-   
+     
 })
 
 
