@@ -782,7 +782,7 @@ setTimeout(() => {
     <div class="footer-top-body">
       <div class="contact-banner">
         <div class="logo">
-          <a href="/" aria-label="TriMark Home">
+          <a href="${domain}/login" aria-label="TriMark Home">
              <img width="170" src="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png" alt="TriMark" />  
           </a>
         </div>
