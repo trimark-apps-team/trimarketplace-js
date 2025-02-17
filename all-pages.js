@@ -775,8 +775,8 @@ $('document').ready(function () {
 // ===========================================================
 
 //--------------------------------------------------
-$(document).ready(function() {
-    setTimeout(() => {
+$('document').ready(function() {
+   
         let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
         const footerHTML = `<footer id="global-trimarkusa-footer">
       <div class="footer-top">
@@ -961,12 +961,8 @@ $(document).ready(function() {
         </div>
       </div>
     </footer>`;
-    
-        const mainContent = document.querySelector("main#content");
-        if (mainContent) {
-            mainContent.insertAdjacentHTML("afterend", footerHTML);
-        }
-    }, 1000);
+     document.body.insertAdjacentHTML("beforeend", footerHTML);
+   
 })
 
 
