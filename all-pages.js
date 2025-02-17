@@ -783,7 +783,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="contact-banner">
         <div class="logo">
           <a href="/" aria-label="TriMark Home">
-             <img width="170" src="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=170&amp;name=trimark_logo.png" alt="TriMark" srcset="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=85&amp;name=trimark_logo.png 85w, https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=170&amp;name=trimark_logo.png 170w, https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=255&amp;name=trimark_logo.png 255w, https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=340&amp;name=trimark_logo.png 340w, https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=425&amp;name=trimark_logo.png 425w, https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png?width=510&amp;name=trimark_logo.png 510w" sizes="(max-width: 170px) 100vw, 170px">  
+             <img width="170" src="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png" alt="TriMark" />  
           </a>
         </div>
          <a href="tel:8882885346" class="phone">
