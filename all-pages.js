@@ -972,18 +972,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // ===========================================================
 // ===========================================================
 
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// Page Initialization
-$('document').ready(function () {
 
-    setTimeout(function () {
-        setFooterHtml(getFooterLinks());
-    }, 500);
-
-    // Construct and show global footer
-
-});
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 
 // add white logo to banner
