@@ -962,23 +962,15 @@ $('document').ready(function() {
       </div>
     </footer>`;
 
-    // Function to observe DOM changes
-    const footerObserver = new MutationObserver((mutationsList, footerObserver) => {
-        const mainContent = document.querySelector("main#content");
-        if (mainContent) {
-            // Check if the footer already exists before inserting it
-            if (!document.querySelector('#global-trimarkusa-footer')) {
-                mainContent.insertAdjacentHTML("afterend", footerHTML);
-            }
-            footerObserver.disconnect();  // Stop observing after insertion
-        }
-    });
+    // Use setTimeout to delay appending the footer to the bottom of the body
+    setTimeout(function () {
+        // Convert the HTML string into a DOM element
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = footerHTML.trim();
 
-    // Start observing the DOM for changes to the document body
-    footerObserver.observe(document.body, {
-        childList: true,
-        subtree: true,
-    });
+        // Append the footer to the bottom of the body
+        document.body.appendChild(tempDiv.firstChild);
+    }, 1000); // Delay of 1 second (1000ms)
      
 })
 
