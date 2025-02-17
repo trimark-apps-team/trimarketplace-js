@@ -775,7 +775,7 @@ $('document').ready(function () {
 // ===========================================================
 
 //--------------------------------------------------
-document.addEventListener("DOMContentLoaded", function () {
+setTimeout(() => {
     let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
     const footerHTML = `<footer id="global-trimarkusa-footer">
   <div class="footer-top">
@@ -965,7 +965,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (mainContent) {
         mainContent.insertAdjacentHTML("afterend", footerHTML);
     }
-});
+}, 2000);
+
 // ===========================================================
 // ===========================================================
 // END OF Set customer footer area for all pages
