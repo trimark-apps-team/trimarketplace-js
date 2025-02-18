@@ -962,10 +962,23 @@ $('document').ready(function() {
       </div>
     </div>`;
 
-    setTimeout(function () {
-        // Use jQuery to prepend the footer after the dynamic-menu-footer
-        $('.dynamic-menu-footer').prepend(footerHTML);
-    }, 1000); // Delay of 1 second (1000ms)
+   // Function to observe DOM changes
+   const footerObserver = new MutationObserver((mutationsList, footerObserver) => {
+    const mainContent = document.querySelector("main#content");
+    if (mainContent) {
+        // Check if the footer already exists before inserting it
+        if (!document.querySelector('#global-trimarkusa-footer')) {
+            mainContent.insertAdjacentHTML("afterend", footerHTML);
+        }
+        //footerObserver.disconnect();  // Stop observing after insertion
+    }
+});
+
+// Start observing the DOM for changes to the document body
+footerObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+});
      
 })
 
