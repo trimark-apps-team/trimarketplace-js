@@ -778,7 +778,7 @@ $('document').ready(function () {
 $('document').ready(function() {
    
         let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
-        const footerHTML = `<footer id="global-trimarkusa-footer">
+        const footerHTML = `<div id="global-trimarkusa-footer">
       <div class="footer-top">
         <div class="footer-top-body">
           <div class="contact-banner">
@@ -960,16 +960,11 @@ $('document').ready(function() {
           </p>
         </div>
       </div>
-    </footer>`;
+    </div>`;
 
-    // Use setTimeout to delay appending the footer to the bottom of the body
     setTimeout(function () {
-        // Convert the HTML string into a DOM element
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = footerHTML.trim();
-
-        // Append the footer to the bottom of the body
-        document.body.appendChild(tempDiv.firstChild);
+        // Use jQuery to prepend the footer after the dynamic-menu-footer
+        $('.dynamic-menu-footer').prepend(footerHTML);
     }, 1000); // Delay of 1 second (1000ms)
      
 })
