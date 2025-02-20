@@ -869,7 +869,7 @@ $('document').ready(function() {
                     </li>
                     
                      <li class="link">
-                       <a href="${domain}/trimark-usa-locations">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TMK_Warehouse.pdf" target="_blank">
                           Locations
                        </a>
                        
@@ -903,7 +903,7 @@ $('document').ready(function() {
                        </a>
                     </li>
                     <li class="link">
-                       <a href="${domain}/code-of-business-ethics-and-conduct">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Code-of-Business-Ethics-and-Conduct.pdf" target="_blank">
                           Code of Business Ethics and Conduct
                        </a>
                     </li>
@@ -924,7 +924,7 @@ $('document').ready(function() {
                        </a>
                     </li>
                      <li class="link">
-                       <a href="${domain}/terms-of-sale">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Terms-and-Conditions-of-Sale.pdf" target="_blank">
                           Terms of Sale
                        </a>
                     </li>
@@ -934,12 +934,12 @@ $('document').ready(function() {
                        </a>
                     </li>
                     <li class="link">
-                       <a href="${domain}/trimark-usa-trademarks">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark_Trademarks.pdf" target="_blank">
                           TriMark USA Trademarks
                        </a>
                     </li>
                     <li class="link">
-                       <a href="${domain}/supplier-code-of-conduct">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/Supplier-Code-of-Conduct.pdf" target="_blank">
                           Supplier Code of Conduct
                        </a>
                     </li>
