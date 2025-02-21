@@ -778,6 +778,7 @@ $('document').ready(function () {
 $('document').ready(function() {
    
         let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
+
         const footerHTML = `<div id="global-trimarkusa-footer">
       <div class="footer-top">
         <div class="footer-top-body">
@@ -862,7 +863,7 @@ $('document').ready(function() {
                   <ul>
                     
                      <li class="link">
-                       <a href="${domain}/about-us">
+                       <a href="${domain}/about-us" target="_blank">
                           About Us
                        </a>
                        
@@ -898,7 +899,7 @@ $('document').ready(function() {
                 </p>
                   <ul>
                   <li class="link">
-                       <a href="${domain}/terms-use">
+                       <a href="${domain}/terms-use" target="_blank">
                           Terms of Use
                        </a>
                     </li>
@@ -909,17 +910,17 @@ $('document').ready(function() {
                     </li>
     
                     <li class="link">
-                       <a href="${domain}/privacy-policy">
+                       <a href="${domain}/privacy-policy" target="_blank">
                           Privacy Policy
                        </a>
                     </li>
                      <li class="link">
-                       <a href="${domain}/ca-privacy">
+                       <a href="${domain}/ca-privacy" target="_blank">
                           California Privacy Notice
                        </a>
                     </li>
                     <li class="link">
-                       <a href="https://share.hsforms.com/1RBt11_loTpOgohP2SdzKxQ5ltn6">
+                       <a href="https://share.hsforms.com/1RBt11_loTpOgohP2SdzKxQ5ltn6" target="_blank">
                           Do Not Sell My Personal Information
                        </a>
                     </li>
@@ -929,7 +930,7 @@ $('document').ready(function() {
                        </a>
                     </li>
                     <li class="link">
-                      <a href="${domain}/return-policy">
+                      <a href="${domain}/return-policy" target="_blank">
                           Return Policy
                        </a>
                     </li>
