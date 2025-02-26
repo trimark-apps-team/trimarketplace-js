@@ -775,88 +775,214 @@ $('document').ready(function () {
 // ===========================================================
 
 //--------------------------------------------------
-function orderFooterLinks(title) {
-    let taxonomy = [];
-    taxonomy.push({ title: 'faq-contact-us', sortId: 1, level: 'primary' });
-    taxonomy.push({ title: 'helpcenter', sortId: 2, level: 'primary' });
-    taxonomy.push({ title: 'mycatalog', sortId: 2, level: 'primary' });
-    taxonomy.push({ title: 'services', sortId: 3, level: 'primary' });
-    taxonomy.push({ title: 'about-us', sortId: 4, level: 'primary' });
-    taxonomy.push({ title: 'trimark-usa-locations', sortId: 5, level: 'primary' });
-    taxonomy.push({ title: 'careers', sortId: 6, level: 'primary' });
+$('document').ready(function() {
+   
+        let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
 
-    var pageMatch = {};
-    var match = taxonomy.map(page => {
-        if (title === page.title) {
-            pageMatch = page;
+        const footerHTML = `<div id="global-trimarkusa-footer">
+      <div class="footer-top">
+        <div class="footer-top-body">
+          <div class="contact-banner">
+            <div class="logo">
+              <a href="${domain}/login" aria-label="TriMark Home">
+                 <img width="170" src="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png" alt="TriMark" />  
+              </a>
+            </div>
+             <a href="tel:8882885346" class="phone">
+             <i class="fa fa-phone"></i> (888) 288-5346
+            </a>
+             <div class="email"><i class="fa fa-envelope"></i>
+               <a href="mailto:support@trimarketplace.com">support@trimarketplace.com</a>
+            </div>
+             <nav class="social">
+               <ul>
+                  <li class="social-icon">
+                   <a href="https://www.facebook.com/TrimarkUSA" class="social-media-link" aria-label="link facebook" target="_new">
+      <svg class="icon facebook">
+        <use xlink:href="#facebook"></use>
+      </svg>
+    </a>
+                   </li>
+                  <li class="social-icon">
+                      <a href="https://twitter.com/TriMarkUSA" class="social-media-link" aria-label="link twitter" target="_new">
+      <svg class="icon twitter">
+        <use xlink:href="#twitter"></use>
+      </svg>
+    </a>
+                   
+                 </li>
+                   <li class="social-icon">
+                    <a href=" http://linkedin.com/company/trimarkusa/" class="social-media-link" aria-label="link linkedin" target="_new">
+      <svg class="icon linkedin">
+        <use xlink:href="#linkedin"></use>
+      </svg>
+    </a>
+                    
+                 </li>
+                   <li class="social-icon"> 
+                    <a href="https://www.youtube.com/channel/UC-_N3m1fOpMpdFTldZyKMvA" class="social-media-link" aria-label="link youtube" target="_new">
+      <svg class="icon youtube">
+        <use xlink:href="#youtube"></use>
+      </svg>
+    </a>
+                   
+           
+                   <li class="social-icon">
+                     <a href="https://www.instagram.com/trimarkusa/" class="social-media-link" aria-label="link instagram" target="_new">
+      <svg class="icon instagram">
+        <use xlink:href="#instagram"></use>
+      </svg>
+    </a>
+                     
+                 </li>
+                  <li class="social-icon">
+                    <a href="https://www.pinterest.com/TriMarkUSA/" class="social-media-link" aria-label="link pinterest" target="_new">
+      <svg class="icon pinterest">
+        <use xlink:href="#pinterest"></use>
+      </svg>
+    </a>
+            
+                 </li>
+                 
+                 
+               </ul>
+         
+            </nav>
+          </div>
+          <div class="link-wrapper">
+            <div class="link-columns">
+              
+             
+              <nav class="link-column">
+                
+                <p class="column-head">
+                 Company
+                </p>
+                
+                
+                  <ul>
+                    
+                     <li class="link">
+                       <a href="${domain}/about-us" target="_blank">
+                          About Us
+                       </a>
+                       
+                    </li>
+                    
+                     <li class="link">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TMK_Warehouse.pdf" target="_blank">
+                          Locations
+                       </a>
+                       
+                    </li>
+                    
+                   
+                    
+                     
+                    
+                     <li class="link">
+                       <a href="https://support.trimarketplace.com/en/knowledge" target="_blank">
+                          FAQs
+                       </a>
+                       
+                    </li>
+                    
+                  </ul>
+                
+              </nav>
+              
+             
+              <nav class="link-column">
+                
+                <p class="column-head">
+                 Legal
+                </p>
+                  <ul>
+                  <li class="link">
+                       <a href="${domain}/terms-use" target="_blank">
+                          Terms of Use
+                       </a>
+                    </li>
+                    <li class="link">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Code-of-Business-Ethics-and-Conduct.pdf" target="_blank">
+                          Code of Business Ethics and Conduct
+                       </a>
+                    </li>
+    
+                    <li class="link">
+                       <a href="${domain}/privacy-policy" target="_blank">
+                          Privacy Policy
+                       </a>
+                    </li>
+                     <li class="link">
+                       <a href="${domain}/ca-privacy" target="_blank">
+                          California Privacy Notice
+                       </a>
+                    </li>
+                    <li class="link">
+                       <a href="https://share.hsforms.com/1RBt11_loTpOgohP2SdzKxQ5ltn6" target="_blank">
+                          Do Not Sell My Personal Information
+                       </a>
+                    </li>
+                     <li class="link">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Terms-and-Conditions-of-Sale.pdf" target="_blank">
+                          Terms of Sale
+                       </a>
+                    </li>
+                    <li class="link">
+                      <a href="${domain}/return-policy" target="_blank">
+                          Return Policy
+                       </a>
+                    </li>
+                    <li class="link">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark_Trademarks.pdf" target="_blank">
+                          TriMark USA Trademarks
+                       </a>
+                    </li>
+                    <li class="link">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/Supplier-Code-of-Conduct.pdf" target="_blank">
+                          Supplier Code of Conduct
+                       </a>
+                    </li>
+                  </ul>
+              </nav> 
+            </div>
+           
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-wrapper">
+          <address class="address">
+            TriMark USA, LLC, 9 Hampshire Street, Mansfield, MA 02048
+          </address>
+          <p class="copyright">
+            Copyright © 2025, All Rights Reserved
+          </p>
+        </div>
+      </div>
+    </div>`;
+
+   // Function to observe DOM changes
+   const footerObserver = new MutationObserver((mutationsList, footerObserver) => {
+    const mainContent = document.querySelector("main#content");
+    if (mainContent) {
+        // Check if the footer already exists before inserting it
+        if (!document.querySelector('#global-trimarkusa-footer')) {
+            mainContent.insertAdjacentHTML("afterend", footerHTML);
         }
-    });
-    return pageMatch;
-}
+        //footerObserver.disconnect();  // Stop observing after insertion
+    }
+});
 
-function getFooterLinks() {
-    // --- Get footer links ---
-    var footerMenuArray = [];
-    listItems = $(".dynamic-menu-footer ul li").find("a").each(function (i) {
-        let menuItem = {};
-        var page = $(this)[0];
-        menuItem.href = $(page).attr('href');
-        menuItem.title = $(page)[0].innerText;
-        footerMenuArray.push(menuItem);
-        var str = menuItem.href.replace(window.origin + "/", "");
+// Start observing the DOM for changes to the document body
+footerObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+});
+     
+})
 
-        if (Object.keys(orderFooterLinks(str)).length) {
-            menuItem.sortId = orderFooterLinks(str).sortId;
-            menuItem.level = orderFooterLinks(str).level;
-        } else {
-            menuItem.sortId = 0;
-            menuItem.level = 'secondary';
-        }
-    });
-    return footerMenuArray;
-}
-
-getSortedLinks = (level, links) => {
-    return links.filter(page => {
-        return page.level === level
-    }).sort((a, b) => a.sortId - b.sortId);
-}
-
-setFooterHtml = (links) => {
-    footerHtml = $('<div id="tm-footer"><div id="logo"><!-- logo --></div><div id="primary-links"><!-- primary --></div><div id="secondary-links"><!-- secondary --></div><div id="social-media"><!-- primary --></div><div id="tm-address"><!-- address--></div><div id="copyright"><!-- copyright --></div></div>');
-    footerHtml.prependTo($('.dynamic-menu-footer'));
-
-    primaryLinks = getSortedLinks('primary', links);
-    secondaryLinks = getSortedLinks('secondary', links);
-
-    primaryHtml = '';
-    secondaryHtml = '';
-    primaryLinks.map(link => {
-        primaryHtml += `<div class="primary-link-cell"><a href=${link.href}>${link.title}</a></div>`;
-    });
-
-    secondaryLinks.map(link => {
-        secondaryHtml += `<div class="secondary-link-cell"><a href=${link.href} target="_blank">${link.title}</a> </div> | `;
-    });
-
-    socialMedia = $('.footer-social-media-wrapper')[0];
-
-    // add target to open sm in new window
-    $('.social-media-link').attr('target', '_new');
-
-    address = '<span>TriMark USA LLC</span><span>9 Hampshire Street</span><span>Mansfield, MA 02048</span><span>P: 888.288.5346</span>';
-    copyright = '<span>Copyright &copy; 2024  TriMark. All Rights Reserved.</span>';
-
-    logoImg = '<a href=https://www.trimarkusa.com><img src="https://shop.trimarketplace.com/documents/24337183/24339947/trimark-logo-232.png" /></a>';
-
-    // insert footer elements one at a time
-    $(logoImg).prependTo($('.dynamic-menu-footer #logo'));
-    $(primaryHtml).prependTo($('#primary-links'));
-    $(secondaryHtml).prependTo($('#secondary-links'));
-    $(socialMedia).prependTo($('#social-media'));
-    $(address).prependTo($('#tm-address'));
-    $(copyright).prependTo($('#copyright'));
-}
 
 // ===========================================================
 // ===========================================================
@@ -864,19 +990,138 @@ setFooterHtml = (links) => {
 // ===========================================================
 // ===========================================================
 
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// Page Initialization
-$('document').ready(function () {
 
-    setTimeout(function () {
-        setFooterHtml(getFooterLinks());
-    }, 500);
-
-    // Construct and show global footer
-
-});
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 
 // add white logo to banner
 $(".main-nav-wrapper").append("<div class='trimarketplace-logo-white'><a href='/my-account'><img src='https://qa.trimarketplace.com/documents/18586322/20080704/TriMarketPlace-logo-white.png'  /></a></div>");
+
+
+
+
+// pending approval notfication function for orderdets page in the approver flow
+const checkPendingApprovalsAllPages = () => {
+    $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
+        console.log(data.orderForApprovalResponse)
+        let customerEmail = sessionStorage.getItem('customerEmail');
+        if(window.location.href.includes('qa.trimarketplace.com')) {
+            customerEmail = 'kevin.kindorf@trimarkusa.com'
+        }
+        let approvalResponseList = data.orderForApprovalResponse;
+        // declare this as a string with valuje of false since hubspot properties need value to be string
+        let hasPendingApproval = "false";
+        if(approvalResponseList) {
+            console.log(approvalResponseList)
+            // responselist array is empty always set notify flag to false
+            if(approvalResponseList.length === 0) {
+                console.log('approval list is empty set notify flag to false')
+                $.ajax({
+                    url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                    type: 'patch',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        sessionStorage.setItem('triggerPendingApproval', 'false')
+                        sessionStorage.setItem('pendingApprovalCount', 'none')
+                        hasPendingApproval = "false";
+                    },
+                    data: JSON.stringify({
+                        "properties": {
+                            "rhythm_approver_notify": 'false'
+                        }
+                    })
+                });
+            }
+
+            // if approval response list is a length of one, check if its pending
+            // and set notify to true if approval is pending and pendingApprovalCount to last
+            else if(approvalResponseList.length === 1) {
+                for(var i = 0; i < approvalResponseList.length; i++) {
+                    let approval = approvalResponseList[i]
+                    if(approval.approveStatus === "Pending"){
+                        hasPendingApproval = "true";
+                        break;
+                    }
+                   
+                }
+                if (hasPendingApproval === 'true') {
+                    let customerEmail = sessionStorage.getItem('customerEmail');
+                    if(window.location.href.includes('qa.trimarketplace.com')) {
+                        customerEmail = 'kevin.kindorf@trimarkusa.com'
+                    }
+                    $.ajax({
+                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                        type: 'patch',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            sessionStorage.setItem('triggerPendingApproval', 'true')
+                            sessionStorage.setItem('pendingApprovalCount', 'last')
+                            hasPendingApproval = "false";
+                        },
+                        data: JSON.stringify({
+                            "properties": {
+                                "rhythm_approver_notify": 'true'
+                            }
+                        })
+                    });
+                }
+            }
+
+            else if(approvalResponseList.length > 1) {
+                for(var i = 0; i < approvalResponseList.length; i++) {
+                    let approval = approvalResponseList[i]
+                    if(approval.approveStatus === "Pending"){
+                        hasPendingApproval = "true";
+                        break;
+                    }
+                   
+                }
+                if (hasPendingApproval === 'true') {
+                    let customerEmail = sessionStorage.getItem('customerEmail');
+                    if(window.location.href.includes('qa.trimarketplace.com')) {
+                        customerEmail = 'kevin.kindorf@trimarkusa.com'
+                    }
+                    $.ajax({
+                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                        type: 'patch',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            sessionStorage.setItem('triggerPendingApproval', 'true')
+                            sessionStorage.setItem('pendingApprovalCount', approvalResponseList.length)
+                            hasPendingApproval = "false";
+                        },
+                        data: JSON.stringify({
+                            "properties": {
+                                "rhythm_approver_notify": 'true'
+                            }
+                        })
+                    });
+                }
+            }
+            
+        }
+        
+    });
+}
+
+
+const approvalDetsObserver = new MutationObserver(() => {
+    let rejectOrderTitle = $(".bbm-modal-title")
+    const proceedToReject = $('.bbm-modal-content .btn-wrapper .btn-proceed');
+
+    // reject order after proceed button in reject order modal is clicked
+    if (rejectOrderTitle.text() === "Reject Order") {
+        $(proceedToReject).unbind().click(function() {
+            console.log('approver has rejected order')
+            setTimeout(() => {
+                checkPendingApprovalsAllPages();
+              }, 500);
+            
+        })
+    }
+
+});
+
+approvalDetsObserver.observe(document.body, { childList: true, subtree: true });
