@@ -1,0 +1,49 @@
+name: Auto Tag and Release on Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensures all tags are fetched
+
+      - name: Get Latest Tag
+        id: get_tag
+        run: |
+          latest_tag=$(git tag --list | sort -V | tail -n1)
+          echo "Latest tag: $latest_tag"
+
+          if [[ -z "$latest_tag" ]]; then
+            new_tag="1.1.00"
+          else
+            IFS='.' read -r major minor patch <<< "$latest_tag"
+            new_patch=$(printf "%02d" $((10#$patch + 1)))
+            new_tag="$major.$minor.$new_patch"
+          fi
+
+          echo "New tag: $new_tag"
+          echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
+
+      - name: Create and Push New Tag
+        run: |
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.NEW_TAG }}
+          name: "${{ env.NEW_TAG }}"  # Use only the version number
+          body: "## Changes in this Release\n\n- Auto-generated release for version ${{ env.NEW_TAG }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
