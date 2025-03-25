@@ -15,5 +15,3 @@ We are creating CDNs for each javascript file in this repository via [JSDelivr](
 6. After a release is created by the github action, copy the file path blob from main that you want to update in the QA environment by copying the github url of the file.
 7. go [here](https://www.jsdelivr.com/github) and paste the copied url into the first input. Replace the branch name "main" in the url with the version number of the latest published release. JSDelivr should automatically create a CDN url for the file basedon the version number you entered.
 8. Replace the old CDN url in the QA environment with the new URL. Have interested parties review changes on the site as necessary.
-
-test
