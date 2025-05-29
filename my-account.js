@@ -2,7 +2,7 @@ const setUserEmail = () => {
   const userEmail = window.Liferay?.ThemeDisplay?.getUserEmailAddress?.() ?? "";
 
   if (!$('.user-email').length) {
-    $('.user-component-container:first').append(<div class='user-email'><span>Email:</span> ${userEmail}</div>);
+    $('.user-component-container:first').append(`<div class='user-email'><span>Email:</span> ${userEmail}</div>`);
   }
 }
 
@@ -78,7 +78,7 @@ function dspSaleInfo() {
 
       })
       .catch(function (error) {
-        console.log(dspSaleInfo(error)->${error});
+        console.log(`dspSaleInfo(error)->${error}`);
 
       }); // end rhythm enpoint call	
 
@@ -131,7 +131,7 @@ function getSalesmanDetail(smcd) {
 
     })
     .catch(function (error) {
-      console.log(getSalesmanDetail(error)->${error});
+      console.log(`getSalesmanDetail(error)->${error}`);
 
     }); // end rhythm enpoint call	
 }
@@ -218,10 +218,10 @@ function submitHSForm(hsFormURL, data) {
     var qaformGuid = '2cfec285-66e3-4121-b71b-e4c0bde110db' 
     var submitURL = ''
     if(window.location.href.includes('qa.')) {
-      submitURL = ${baseSubmitURL}/${qaPortalId}/${qaformGuid}
+      submitURL = `${baseSubmitURL}/${qaPortalId}/${qaformGuid}`
     }
     else if(window.location.href.includes('shop.')) {
-      submitURL = ${baseSubmitURL}/${prodPortalId}/${prodFormGuid}
+      submitURL = `${baseSubmitURL}/${prodPortalId}/${prodFormGuid}`
     }
     
 
