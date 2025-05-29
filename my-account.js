@@ -1,12 +1,12 @@
 const setUserEmail = () => {
-  const userEmail = Liferay.ThemeDisplay.getUserEmailAddress();
+  const userEmail = window.Liferay?.ThemeDisplay?.getUserEmailAddress?.() ?? "";
 
   if (!$('.user-email').length) {
-    $('.user-component-container:first').append(`<div class='user-email'><span>Email:</span> ${userEmail}</div>`);
+    $('.user-component-container:first').append(<div class='user-email'><span>Email:</span> ${userEmail}</div>);
   }
 }
 
-// define the target node
+//define the target node
 var targetNode = document.body;
 
 // configuration of the observer
@@ -14,7 +14,6 @@ const config = { childList: true, characterData: true, subtree: true, attributes
 
 // callback function
 const callback = function (mutationsList, observer) {
-  hideExtraAddresses();
   setUserEmail();
 };
 // Create observer instance
@@ -25,19 +24,6 @@ if (targetNode) {
   observer.observe(targetNode, config);
 }
 
-hideExtraAddresses = () => {
-  if (!$(".shipping-content").hasClass("expanded")) {
-    $(".content-toggler").click().hide();
-    $(".shipping-content").addClass("expanded");
-    $(".header-content").hide();
-    $("#user-favorite-icon").hide();
-  }
-}
-
-$(document).ready(function () {
-
-  hideExtraAddresses();
-});
 
 
 // ===========================================================
@@ -92,7 +78,7 @@ function dspSaleInfo() {
 
       })
       .catch(function (error) {
-        console.log(`dspSaleInfo(error)->${error}`);
+        console.log(dspSaleInfo(error)->${error});
 
       }); // end rhythm enpoint call	
 
@@ -145,7 +131,7 @@ function getSalesmanDetail(smcd) {
 
     })
     .catch(function (error) {
-      console.log(`getSalesmanDetail(error)->${error}`);
+      console.log(getSalesmanDetail(error)->${error});
 
     }); // end rhythm enpoint call	
 }
@@ -153,7 +139,7 @@ function getSalesmanDetail(smcd) {
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Initialization
-$('document').ready(function () {
+$(document).ready(function () {
   // remove the session storage items on initial page ready so we can reset
   sessionStorage.removeItem('customerEmail')
   sessionStorage.removeItem('salesEmail')
@@ -182,7 +168,7 @@ function prepareHSFormSubmission(customerName, customerNumber) {
 var submissionData = new Object()
 submissionData.submittedAt = Date.now()
 submissionData.fields = [
-  {"name":"email","value": Liferay.ThemeDisplay.getUserEmailAddress()}, 
+  {"name":"email","value": window.Liferay?.ThemeDisplay?.getUserEmailAddress?.() ?? ""}, 
   {"name":"rhythm_company_name","value": customerName},
   {"name":"rhythm_company_number","value": customerNumber}
 ]
@@ -232,17 +218,17 @@ function submitHSForm(hsFormURL, data) {
     var qaformGuid = '2cfec285-66e3-4121-b71b-e4c0bde110db' 
     var submitURL = ''
     if(window.location.href.includes('qa.')) {
-      submitURL = `${baseSubmitURL}/${qaPortalId}/${qaformGuid}`
+      submitURL = ${baseSubmitURL}/${qaPortalId}/${qaformGuid}
     }
     else if(window.location.href.includes('shop.')) {
-      submitURL = `${baseSubmitURL}/${prodPortalId}/${prodFormGuid}`
+      submitURL = ${baseSubmitURL}/${prodPortalId}/${prodFormGuid}
     }
     
 
     setTimeout(function() {
       var formData = prepareHSFormSubmission(sessionStorage.getItem('companyName'), sessionStorage.getItem('customerNumber'));
       submitHSForm(submitURL, formData)
-    }, 600)
+    }, 1000)
     
 
 
