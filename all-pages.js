@@ -792,7 +792,7 @@ $('document').ready(function() {
              <i class="fa fa-phone"></i> (888) 288-5346
             </a>
              <div class="email"><i class="fa fa-envelope"></i>
-               <a href="mailto:support@trimarketplace.com">support@trimarketplace.com</a>
+               <a href="mailto:trimarketplacesupport@trimarkusa.com">trimarketplacesupport@trimarkusa.com</a>
             </div>
              <nav class="social">
                <ul>
