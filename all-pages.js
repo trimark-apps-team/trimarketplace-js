@@ -612,8 +612,7 @@ function fixTwitterIcon() {
 // ===========================================================
 // ===========================================================
 
-var g_crs881_GetTranslData = '/o/generic-api/GetTranslData?mbmd=';
-
+var g_crs881_GetTranslData = '/o/generic-api/EXT881MI_GetTranslData?mbmd=';
 //--------------------------------------------------
 function setCustLogo() {
     let timeoutvar4setCustLogo;
