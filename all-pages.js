@@ -924,7 +924,7 @@ $('document').ready(function() {
                        </a>
                     </li>
                      <li class="link">
-                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Terms-and-Conditions-of-Sale.pdf" target="_blank">
+                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Terms-and-Conditions-of-Sale-7.14.25.pdf" target="_blank">
                           Terms of Sale
                        </a>
                     </li>
