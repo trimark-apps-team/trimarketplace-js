@@ -952,7 +952,7 @@ $('document').ready(function() {
             TriMark USA, LLC, 9 Hampshire Street, Mansfield, MA 02048
           </address>
           <p class="copyright">
-            Copyright © 2025, All Rights Reserved
+            Copyright © 2025, All Rights Reserved.
           </p>
         </div>
       </div>
