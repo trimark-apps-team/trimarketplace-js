@@ -869,7 +869,7 @@ $('document').ready(function() {
                     </li>
                     
                      <li class="link">
-                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TMK_Warehouse.pdf" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TMK_Warehouse.pdf" target="_blank">
                           Locations
                        </a>
                        
@@ -898,48 +898,44 @@ $('document').ready(function() {
                 </p>
                   <ul>
                   <li class="link">
-                       <a href="${domain}/terms-use" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Website-Terms-of-Use-2-27-23.pdf" target="_blank">
                           Terms of Use
                        </a>
                     </li>
                     <li class="link">
-                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Code-of-Business-Ethics-and-Conduct.pdf" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/Trimark-Code-Of-Business-Ethics-and-Conduct.pdf" target="_blank">
                           Code of Business Ethics and Conduct
                        </a>
                     </li>
     
                     <li class="link">
-                       <a href="${domain}/privacy-policy" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-USA-Site-Privacy-Policy.pdf" target="_blank">
                           Privacy Policy
                        </a>
                     </li>
                      <li class="link">
-                       <a href="${domain}/ca-privacy" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-California-Privacy-Notice-07-21-2022.pdf" target="_blank">
                           California Privacy Notice
                        </a>
                     </li>
-                    <li class="link">
-                       <a href="https://share.hsforms.com/1RBt11_loTpOgohP2SdzKxQ5ltn6" target="_blank">
-                          Do Not Sell My Personal Information
-                       </a>
-                    </li>
+                    
                      <li class="link">
-                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark-Terms-and-Conditions-of-Sale-7.14.25.pdf" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-and-Conditions-of-Sale.pdf" target="_blank">
                           Terms of Sale
                        </a>
                     </li>
                     <li class="link">
-                      <a href="${domain}/return-policy" target="_blank">
-                          Return Policy
+                      <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-of-Purchase.pdf" target="_blank">
+                          Terms of Purchase
                        </a>
                     </li>
                     <li class="link">
-                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/TriMark_Trademarks.pdf" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/2022_TriMark_Trademarks.pdf" target="_blank">
                           TriMark USA Trademarks
                        </a>
                     </li>
                     <li class="link">
-                       <a href="https://cdn.trimarkusa.com/assets/brand_pages/Supplier-Code-of-Conduct.pdf" target="_blank">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Supplier-Code-of-Conduct.pdf" target="_blank">
                           Supplier Code of Conduct
                        </a>
                     </li>
@@ -956,7 +952,7 @@ $('document').ready(function() {
             TriMark USA, LLC, 9 Hampshire Street, Mansfield, MA 02048
           </address>
           <p class="copyright">
-            Copyright © 2025, All Rights Reserved
+            Copyright © 2025, All Rights Reserved.
           </p>
         </div>
       </div>
