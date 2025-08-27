@@ -907,6 +907,10 @@ $('document').ready(function() {
                           Code of Business Ethics and Conduct
                        </a>
                     </li>
+
+                    <li class="link">
+                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-of-Design.pdf" target="_blank">Terms of Design<svg class="icon external-link" focusable="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#external-link"></use></svg></a>
+                    </li>
     
                     <li class="link">
                        <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-USA-Site-Privacy-Policy.pdf" target="_blank">
