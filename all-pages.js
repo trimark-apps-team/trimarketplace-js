@@ -784,7 +784,7 @@ $('document').ready(function() {
           <div class="contact-banner">
             <div class="logo">
               <a href="${domain}/login" aria-label="TriMark Home">
-                 <img width="170" src="https://qa.trimarkusa.com/hs-fs/hubfs/raw_assets/public/TriMarkUSA-PROD/images/logos/trimark_logo.png" alt="TriMark" />  
+                 <img width="170" src="https://docs.trimarkusa.com/hubfs/trimark-logo-hubspot.png" alt="TriMark" />  
               </a>
             </div>
              <a href="tel:8882885346" class="phone">
@@ -869,7 +869,7 @@ $('document').ready(function() {
                     </li>
                     
                      <li class="link">
-                       <a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TMK_Warehouse.pdf" target="_blank">
+                       <a href="https://docs.trimarkusa.com/where-we-serve" target="_blank">
                           Locations
                        </a>
                        
