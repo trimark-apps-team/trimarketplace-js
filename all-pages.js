@@ -1015,7 +1015,7 @@ const checkPendingApprovalsAllPages = () => {
             if(approvalResponseList.length === 0) {
                 console.log('approval list is empty set notify flag to false')
                 $.ajax({
-                    url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                    url: `https://rhythm-hubspot-proxy.vercel.app/abandon-cart?email=${customerEmail}`,
                     type: 'patch',
                     dataType: 'json',
                     contentType: 'application/json',
@@ -1049,7 +1049,7 @@ const checkPendingApprovalsAllPages = () => {
                         customerEmail = 'kevin.kindorf@trimarkusa.com'
                     }
                     $.ajax({
-                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                        url: `https://rhythm-hubspot-proxy.vercel.app/abandon-cart?email=${customerEmail}`,
                         type: 'patch',
                         dataType: 'json',
                         contentType: 'application/json',
@@ -1082,7 +1082,7 @@ const checkPendingApprovalsAllPages = () => {
                         customerEmail = 'kevin.kindorf@trimarkusa.com'
                     }
                     $.ajax({
-                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
+                        url: `https://rhythm-hubspot-proxy.vercel.app/abandon-cart?email=${customerEmail}`,
                         type: 'patch',
                         dataType: 'json',
                         contentType: 'application/json',
