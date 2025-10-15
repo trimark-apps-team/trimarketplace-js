@@ -1,26 +1,33 @@
-/* create Mutation Observer */
-const config = { childList: true, characterData: false, subtree: true, attributes: true };
+// ===========================================================
+// TriMark Marketplace - Low Stock Warning Update (Window Scoped)
+// ===========================================================
 
-const callback = function (mutationsList, observer) {
-  updateWarningText();
+// Make updateWarningText globally accessible
+window.updateWarningText = function() {
+  // Replace "Currently not in stock" with "Low"
+  const warningMessages = $('.message.warning');
+  warningMessages.each(function(index, warningDiv) {
+      if ($(warningDiv).html().trim() === "Currently not in stock") {
+          $(warningDiv).html("Low");
+      }
+  });
 };
 
-const observer = new MutationObserver(callback);
-var targetNode = document.body;
-if (targetNode) {
-  observer.observe(targetNode, config);
-}
-/* end Mutation Observer */
+// ===========================================================
+// Mutation Observer to watch for warning messages
+// ===========================================================
+window.lowStockConfig = { childList: true, characterData: false, subtree: true, attributes: true };
 
-/* update warning text */
-updateWarningText = () => {
-  /* replace "currently not in stock" with "low stock" */
-  const warningMessage = $('.message.warning');
-  warningMessage.map( (warningDiv, i) => {
-     const lowStockDiv = $('.message.warning')[warningDiv];
-     if ( $(lowStockDiv).html() == "Currently not in stock" ) {
-       $(lowStockDiv).html("Low")
-     }
-  });
+window.lowStockCallback = function(mutationsList, observer) {
+  window.updateWarningText();
+};
 
+window.lowStockObserver = new MutationObserver(window.lowStockCallback);
+
+window.lowStockTarget = document.body;
+if (window.lowStockTarget) {
+  window.lowStockObserver.observe(window.lowStockTarget, window.lowStockConfig);
 }
+
+// Run once on initial load
+window.updateWarningText();

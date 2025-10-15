@@ -1,40 +1,53 @@
-const setUserEmail = () => {
-    const userEmail = Liferay.ThemeDisplay.getUserEmailAddress();
+// ===========================================================
+// User Email and Shipping Address Display Fix
+// ===========================================================
+
+// Set user email in the UI
+window.setUserEmail = () => {
+    const userEmail = window.Liferay?.ThemeDisplay?.getUserEmailAddress?.() ?? "";
 
     if (!$('.user-email').length) {
-        $('.user-component-container:first').append(`<div class='user-email'><span>Email:</span> ${userEmail}</div>`);
+        $('.user-component-container:first').append(
+            `<div class='user-email'><span>Email:</span> ${userEmail}</div>`
+        );
     }
-}
-
-// define the target node
-var targetNode = document.body;
-
-// configuration of the observer
-const config = { childList: true, characterData: true, subtree: true, attributes: true, };
-
-// callback function
-const callback = function (mutationsList, observer) {
-    hideExtraAddresses();
-    setUserEmail();
 };
-// Create observer instance
-const observer = new MutationObserver(callback);
 
-// pass in the target node and configuration observer.observe(targetNode, config);
-if (targetNode) {
-    observer.observe(targetNode, config);
-}
-
-hideExtraAddresses = () => {
-    if (!$(".shipping-content").hasClass("expanded")) {
+// Hide extra addresses and expand shipping content
+window.hideExtraAddresses = () => {
+    const shippingContent = $(".shipping-content");
+    if (!shippingContent.hasClass("expanded")) {
         $(".content-toggler").click().hide();
-        $(".shipping-content").addClass("expanded");
+        shippingContent.addClass("expanded");
         $(".header-content").hide();
         $("#user-favorite-icon").hide();
     }
-}
+};
 
-$(document).ready(function () {
+// ----------------------
+// MutationObserver
+// ----------------------
+window.addUserEmailObserver = () => {
+    const targetNode = document.body;
+    const config = { childList: true, characterData: true, subtree: true, attributes: true };
 
-    hideExtraAddresses();
+    const callback = (mutationsList, observer) => {
+        window.hideExtraAddresses();
+        window.setUserEmail();
+    };
+
+    const observer = new MutationObserver(callback);
+
+    if (targetNode) {
+        observer.observe(targetNode, config);
+    }
+};
+
+// ----------------------
+// Document Ready
+// ----------------------
+$(document).ready(() => {
+    window.hideExtraAddresses();
+    window.setUserEmail();
+    window.addUserEmailObserver();
 });

@@ -1,164 +1,115 @@
-$(window).on('load', function () {
-    // sometimes take a few seconds for statuses to load in DOM
-    // TODO: find better way to handle this
-    // remove these session storage values initially when visiting page.
-    sessionStorage.removeItem('has_pending_approval')
-    sessionStorage.removeItem('triggerPendingApproval')
-    sessionStorage.removeItem('pendingApprovalCount')
-    
-    let rejectButton = $(".reject-btn");
-    setTimeout(setStatusColor, 0);
-    //setTimeout(setStatusColor, 1000 );
-    //setTimeout(setStatusColor, 2000 );
+// ===========================================================
+// TriMark Marketplace - Pending Approvals & Status Colors
+// ===========================================================
 
-    // on page load check for pending approvals
-    checkPendingApprovals()
-
-
-});
-
-addEventListener("DOMNodeInserted", (event) => {
-    setStatusColor();
-});
-
-setStatusColor = () => {
+// ----------------------
+// Set status color
+// ----------------------
+window.setStatusColor = function () {
     $('.status-value').each(function (index, item) {
         if (item.innerText === "Approved") {
-            item.style.color = "#198E56"; //TM Green
+            item.style.color = "#198E56"; // TM Green
         } else if (item.innerText === "Pending") {
-            item.style.color = "#C9AA10";
+            item.style.color = "#C9AA10"; // Yellow
         } else if (item.innerText === "Rejected") {
-            item.style.color = "#C03326";
+            item.style.color = "#C03326"; // Red
         }
     });
-}
+};
 
+// ----------------------
+// Check pending approvals
+// ----------------------
+window.checkPendingApprovals = function () {
+    $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
+        const customerEmailOrig = sessionStorage.getItem('customerEmail');
+        const customerEmail = window.location.href.includes('qa.trimarketplace.com')
+            ? 'kevin.kindorf@trimarkusa.com'
+            : customerEmailOrig;
 
-
-const checkPendingApprovals = () => {
- $.get("/delegate/ecom-api/orders/approval?size=2&forApproval=true&status=pen", function (data) {
-        console.log(data.orderForApprovalResponse)
-        let customerEmail = sessionStorage.getItem('customerEmail');
-        if(window.location.href.includes('qa.trimarketplace.com')) {
-            customerEmail = 'kevin.kindorf@trimarkusa.com'
-        }
-        let approvalResponseList = data.orderForApprovalResponse;
-        // declare this as a string with valuje of false since hubspot properties need value to be string
+        const approvalResponseList = data.orderForApprovalResponse;
         let hasPendingApproval = "false";
-        if(approvalResponseList) {
-            console.log(approvalResponseList)
-            // responselist array is empty always set notify flag to false
-            if(approvalResponseList.length === 0) {
-                console.log('approval list is empty set notify flag to false')
+
+        if (approvalResponseList) {
+            if (approvalResponseList.length === 0) {
+                // No pending approvals
                 $.ajax({
                     url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
-                    type: 'patch',
+                    type: 'PATCH',
                     dataType: 'json',
                     contentType: 'application/json',
-                    success: function (data) {
-                        sessionStorage.setItem('triggerPendingApproval', 'false')
-                        sessionStorage.setItem('pendingApprovalCount', 'none')
+                    data: JSON.stringify({ "properties": { "rhythm_approver_notify": 'false' } }),
+                    success: function () {
+                        sessionStorage.setItem('triggerPendingApproval', 'false');
+                        sessionStorage.setItem('pendingApprovalCount', 'none');
                         hasPendingApproval = "false";
-                    },
-                    data: JSON.stringify({
-                        "properties": {
-                            "rhythm_approver_notify": 'false'
-                        }
-                    })
+                    }
                 });
-            }
-
-            // if approval response list is a length of one, check if its pending
-            // and set notify to true if approval is pending and pendingApprovalCount to last
-            else if(approvalResponseList.length === 1) {
-                for(var i = 0; i < approvalResponseList.length; i++) {
-                    let approval = approvalResponseList[i]
-                    if(approval.approveStatus === "Pending"){
+            } else {
+                // One or more approvals
+                for (let i = 0; i < approvalResponseList.length; i++) {
+                    if (approvalResponseList[i].approveStatus === "Pending") {
                         hasPendingApproval = "true";
                         break;
                     }
-                   
                 }
-                if (hasPendingApproval === 'true') {
-                    let customerEmail = sessionStorage.getItem('customerEmail');
-                    if(window.location.href.includes('qa.trimarketplace.com')) {
-                        customerEmail = 'kevin.kindorf@trimarkusa.com'
-                    }
-                    $.ajax({
-                        url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
-                        type: 'patch',
-                        dataType: 'json',
-                        contentType: 'application/json',
-                        success: function (data) {
-                            sessionStorage.setItem('triggerPendingApproval', 'true')
-                            sessionStorage.setItem('pendingApprovalCount', 'last')
-                            hasPendingApproval = "false";
-                        },
-                        data: JSON.stringify({
-                            "properties": {
-                                "rhythm_approver_notify": 'true'
-                            }
-                        })
-                    });
-                }
-            }
 
-            else if(approvalResponseList.length > 1) {
-                for(var i = 0; i < approvalResponseList.length; i++) {
-                    let approval = approvalResponseList[i]
-                    if(approval.approveStatus === "Pending"){
-                        hasPendingApproval = "true";
-                        break;
-                    }
-                   
-                }
-                if (hasPendingApproval === 'true') {
-                    let customerEmail = sessionStorage.getItem('customerEmail');
-                    if(window.location.href.includes('qa.trimarketplace.com')) {
-                        customerEmail = 'kevin.kindorf@trimarkusa.com'
-                    }
+                if (hasPendingApproval === "true") {
                     $.ajax({
                         url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
-                        type: 'patch',
+                        type: 'PATCH',
                         dataType: 'json',
                         contentType: 'application/json',
-                        success: function (data) {
-                            sessionStorage.setItem('triggerPendingApproval', 'true')
-                            sessionStorage.setItem('pendingApprovalCount', approvalResponseList.length)
+                        data: JSON.stringify({ "properties": { "rhythm_approver_notify": 'true' } }),
+                        success: function () {
+                            sessionStorage.setItem('triggerPendingApproval', 'true');
+                            sessionStorage.setItem('pendingApprovalCount', approvalResponseList.length === 1 ? 'last' : approvalResponseList.length);
                             hasPendingApproval = "false";
-                        },
-                        data: JSON.stringify({
-                            "properties": {
-                                "rhythm_approver_notify": 'true'
-                            }
-                        })
+                        }
                     });
                 }
             }
-            
         }
-        
     });
-}
+};
 
-
-const approvalObserver = new MutationObserver(() => {
-    let rejectOrderTitle = $(".bbm-modal-title")
+// ----------------------
+// MutationObserver for Reject Order modal
+// ----------------------
+window.approvalObserver = new MutationObserver(() => {
+    const rejectOrderTitle = $(".bbm-modal-title");
     const proceedToReject = $('.bbm-modal-content .btn-wrapper .btn-proceed');
 
-    // reject order after proceed button in reject order modal is clicked
     if (rejectOrderTitle.text() === "Reject Order") {
-        $(proceedToReject).unbind().click(function() {
-            console.log('approver has rejected order')
+        $(proceedToReject).unbind().click(function () {
+            console.log('approver has rejected order');
             setTimeout(() => {
-                checkPendingApprovals();
-              }, 500);
-            
-        })
+                window.checkPendingApprovals();
+            }, 500);
+        });
     }
 });
 
-approvalObserver.observe(document.body, { childList: true, subtree: true });
+window.approvalObserver.observe(document.body, { childList: true, subtree: true });
 
+// ----------------------
+// Initialize on window load
+// ----------------------
+$(window).on('load', function () {
+    // Clear session storage initially
+    sessionStorage.removeItem('has_pending_approval');
+    sessionStorage.removeItem('triggerPendingApproval');
+    sessionStorage.removeItem('pendingApprovalCount');
 
+    setTimeout(window.setStatusColor, 0);
 
+    // Check pending approvals on page load
+    window.checkPendingApprovals();
+});
+
+// ----------------------
+// DOMNodeInserted fallback to update status colors
+// ----------------------
+window.addEventListener("DOMNodeInserted", () => {
+    window.setStatusColor();
+});

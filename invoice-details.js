@@ -1,30 +1,45 @@
+// ===========================================================
+// TriMark Marketplace - Price List Adjustments
+// ===========================================================
+
+window.adjustPriceList = function() {
+    $("ul.prices li").each(function () {
+        const $li = $(this);
+
+        if ($li.hasClass('chrg-bulk')) {
+            $li.hide();
+        }
+        if ($li.hasClass('chrg-frtext')) {
+            $li.find('.amount-label').text('Freight External');
+        }
+        if ($li.hasClass('chrg-trimin')) {
+            $li.find('.amount-label').text('Trimark Minimum Order Charge ($25 fee)');
+        }
+        if ($li.hasClass('chrg-triref')) {
+            $li.find('.amount-label').text('Trimark Transaction Fee');
+        }
+        if ($li.hasClass('chrg-tritra')) {
+            $li.find('.amount-label').text('Trimark Reference');
+        }
+        if ($li.hasClass('chrg-pl')) {
+            $li.find('.amount-label').text('Warehouse (Ext.)');
+        }
+    });
+
+    // Move .chrg-pl to the end
+    const $pl = $("ul.prices").find('.chrg-pl');
+    $pl.remove();
+    $('ul.prices').append($pl);
+
+    // Append invoice note
+    $(".order-summary-component .content").append(
+        "<p style='text-align: center; padding: 10px;'>For total invoice including tax, please download the PDF from the link above.</p>"
+    );
+};
+
+// Run after document ready with delay
 $(document).ready(function () {
     setTimeout(function () {
-        $("ul.prices li").each(function () {
-            if ($(this).hasClass('chrg-bulk')) {
-                $(this).hide()
-            }
-            if ($(this).hasClass('chrg-frtext')) {
-                $(this).find('.amount-label').text('Freight External')
-            }
-            if ($(this).hasClass('chrg-trimin')) {
-                $(this).find('.amount-label').text('Trimark Minimum Order Charge ($25 fee)')
-            }
-            if ($(this).hasClass('chrg-triref')) {
-                $(this).find('.amount-label').text('Trimark Transaction Fee')
-            }
-            if ($(this).hasClass('chrg-tritra')) {
-                $(this).find('.amount-label').text('Trimark Reference')
-            }
-            if ($(this).hasClass('chrg-pl')) {
-                $(this).find('.amount-label').text('Warehouse (Ext.)')
-            }
-        })
-        let pl = $("ul.prices").find('.chrg-pl')
-        pl.remove()
-        $('ul.prices').append(pl)
-        $(".order-summary-component .content").append("<p style='text-align: center; padding: 10px;'>For total invoice including tax, please download the PDF from the link above.</p>")
-    }, 1000)
-
-
-})
+        window.adjustPriceList();
+    }, 1000);
+});
