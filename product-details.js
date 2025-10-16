@@ -1,200 +1,208 @@
-// ===========================================================
-// Observer Configuration
-// ===========================================================
-window.initProductDetailObserver = () => {
-  const targetNode = document.body;
-  const config = { childList: true, characterData: false, subtree: true, attributes: true };
+// === GLOBAL INITIALIZATION ===
+$(document).ready(function () {
+  setTimeout(window.loadWarehouses, 1500);
+  setTimeout(window.setProductDescriptionToItemName, 1000);
+  setTimeout(window.openPdfLinksInNewWindow, 2000);
+});
 
-  const callback = (mutationsList, observer) => {
-      // Add any future observer-triggered functions here
-      // window.addQuantityListener();
-      // window.replaceProductDescription();
-      // window.getShippingInfo();
-      // window.moveStockText();
-      // window.loadWarehouses();
-      // window.getItemWarehouseInfo();
+// === GLOBAL FUNCTIONS ===
+
+// Add bullets to product description
+window.addBulletToDecription = (featureBullets) => {
+  if (!featureBullets?.length) return;
+
+  const productDescriptionDiv = document.querySelector(".product-description");
+  if (!productDescriptionDiv) return;
+
+  const bulletList = document.createElement("ul");
+  bulletList.classList.add("feature-bullets");
+  bulletList.style.listStyleType = "disc";
+  bulletList.style.paddingLeft = "20px";
+  bulletList.style.paddingTop = "10px";
+  bulletList.style.color = "black";
+
+  featureBullets.forEach((bullet) => {
+    const li = document.createElement("li");
+    li.textContent = bullet.values?.[0] || bullet.value || "";
+    li.style.marginBottom = "5px";
+    bulletList.appendChild(li);
+  });
+
+  productDescriptionDiv.appendChild(bulletList);
+};
+
+// Display standard logos with sprite positions
+window.displayStandardsWithSprites = (standards) => {
+  const standardPositions = {
+    "Energy Star": "-10px -10px",
+    "Design Certified": "-100px -200px",
+    "cETLus": "-100px -300px",
+    "NSF Certified": "-120px -130px",
+    "NSF": "-120px -130px",
+    "Made in America": "-100px -200px",
+    "cULus": "-235px -227px",
+    "UL": "-10px -239px",
+    "UL Classified": "-10px -239px",
+    "ETL": "-100px -228px",
   };
 
-  const observer = new MutationObserver(callback);
-  if (targetNode) observer.observe(targetNode, config);
-};
+  const standardsContainer = document.createElement("div");
+  standardsContainer.classList.add("standards-container");
+  standardsContainer.style.textAlign = "right";
+  standardsContainer.style.marginRight = "50px";
 
-// ===========================================================
-// Load Warehouses & Item Info
-// ===========================================================
-window.loadWarehouses = async () => {
-  try {
-      const data = await window.getWarehouses();
-      const warehouseList = data.map(warehouse => warehouse.id);
-      $("body").data({ warehouses: warehouseList });
-      await window.getItemWarehouseInfo();
-      console.log("warehouses loaded");
-  } catch (error) {
-      console.error("Error loading warehouses:", error);
+  let found = false;
+  standards.forEach((item) => {
+    const value = item.values?.[0];
+    if (standardPositions[value]) {
+      found = true;
+      const span = document.createElement("span");
+      span.classList.add("swatch-sprite");
+      span.style.backgroundImage =
+        "url('/webdav/shop.trimarketplace.com/document_library/Standard_Logos/logo_swatch.png')";
+      span.style.backgroundRepeat = "no-repeat";
+      span.style.width = "100px";
+      span.style.height = "100px";
+      span.style.display = "inline-block";
+      span.style.marginRight = "5px";
+      span.style.backgroundPosition = standardPositions[value];
+      standardsContainer.appendChild(span);
+    }
+  });
+
+  if (found) {
+    const itemNumberDiv = document.querySelector(".item-number");
+    itemNumberDiv?.insertAdjacentElement("afterend", standardsContainer);
   }
 };
 
-window.getItemWarehouseInfo = async () => {
-  const warehouses = $("body").data("warehouses");
-  const widgetInstance = window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"].instance;
-  const itno = widgetInstance?.productDetailMode;
-
-  if (!itno || !warehouses) return;
-
-  const isNonStockItem = await window.isNonStock(itno, warehouses);
-  const productInformation = $('.product-information');
-  const shippingInformation = $(productInformation).find('.shipping-information');
-  const hasNoStock = $(".title").text().includes('No Stock');
-
-  const lowShippingText = '<p class="low-shipping" style="margin-top:10px;">ETA - Shipping 2-3 weeks</p>';
-  const lowText = '<div class="low-stock-warning"><svg class="icon warning" focusable="false"><use xlink:href="#warning"></use></svg><span class="message warning" style="margin-left:10px">Low</span></div>';
-
-  const ribbonLabel = $('.ribbon-container');
-
-  if (isNonStockItem && hasNoStock) {
-      if (!$(ribbonLabel).find('p.non-stock-pdp').length) {
-          $(ribbonLabel).prepend('<p class="non-stock-pdp" style="display: none">Non-Stock</p>');
-      }
-
-      if (!$(shippingInformation).find('.low-shipping').length) {
-          $(shippingInformation).append(lowShippingText);
-      }
-
-      $(".title").hide();
-
-      if (!$(shippingInformation).find('.low-stock-warning').length) {
-          $(shippingInformation).prepend(lowText);
-      }
-  } else {
-      const stockedText = $('.stock-text')?.text();
-      if (stockedText) {
-          $('.stock-text').text(`${stockedText} quantity`);
-          $('.stock-text').append("<div class='stocked-text-oos' style='display:block'>ETA - Shipping 2-3 days</div>");
-      }
+// Add brand name to brand list
+window.addBrand = (brand) => {
+  const ul = document.querySelector("ul.brand-manufacturer");
+  if (ul && ul.children.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = `Brand: ${brand}`;
+    ul.appendChild(li);
   }
 };
 
-// ===========================================================
-// Fetch Warehouses API
-// ===========================================================
-window.getWarehouses = async () => {
-  try {
-      const response = await fetch('/delegate/ecom-api/warehouses?size=100', { method: "GET" });
-      return await response.json();
-  } catch (error) {
-      console.error('Error fetching warehouses:', error);
-      return [];
-  }
-};
-
-// ===========================================================
-// Check if item is non-stock
-// ===========================================================
-window.isNonStock = async (itno, warehouseList) => {
-  const apiUrl = `/o/generic-api/EXPORTMI_MITBAL?qery=MBCONO,MBITNO,MBWHLO,MBIPLA,MBOPLC from MITBAL where MBCONO=[200] and MBITNO=['${itno}']`;
-  try {
-      const res = await fetch(apiUrl, { method: "GET" });
-      const data = await res.json();
-      const hasStock = data.results[0].records.some(rec => {
-          const repl = rec.REPL.toString().split(';');
-          return repl[4] === '1' && warehouseList.includes(repl[2]);
-      });
-      return !hasStock;
-  } catch (error) {
-      console.error('Error fetching MITBAL data:', error);
-      return false;
-  }
-};
-
-// ===========================================================
-// Set product description from Item Name
-// ===========================================================
-window.setProductDescriptionToItemName = async () => {
-  const itno = window.location.pathname.split("/").pop();
-  const apiUrl = `/delegate/ecom-api/items/${itno}/attributes?size=-1`;
-  try {
-      const res = await fetch(apiUrl);
-      const data = await res.json();
-      const obj = data.filter(o => o.key === 'PMDM.AT.ItemName');
-      const desc = obj[0]?.values[0] || "";
-      $('.product-description').text(desc);
-  } catch (error) {
-      console.error('Error setting product description:', error);
-  }
-};
-
-// ===========================================================
-// DOMNodeInserted Event: Prop 65, Reeses Law, Non-Stock, Pim Labels
-// ===========================================================
-window.initProductDetailNodeListener = () => {
-  addEventListener("DOMNodeInserted", () => {
-      const widgetInstance = window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"].instance;
-      if (widgetInstance) {
-          const ribbonContainer = $('.ribbon-container')[0];
-          if (!$(ribbonContainer).find('div.item-number-top').length) {
-              const itemId = widgetInstance.productDetailModel?.attributes?.id;
-              $(ribbonContainer).append(`<div class="item-number-top">Item number: <span>${itemId}</span></div>`);
-          }
-      }
-
-      const modal = document.querySelector(".modal");
-      const overlay = document.querySelector(".overlay");
-      const openModalBtn = document.querySelector(".btn-open");
-      const openReesesModalBtn = document.querySelector(".btn-open-reeses");
-      const closeModalBtn = document.querySelector(".btn-close");
-
-      const closeModal = () => {
-          modal?.classList.add("hidden");
-          overlay?.classList.add("hidden");
-      };
-
-      closeModalBtn?.addEventListener("click", closeModal);
-      overlay?.addEventListener("click", closeModal);
-
-      document.addEventListener("keydown", e => {
-          if (e.key === "Escape" && !modal?.classList.contains("hidden")) closeModal();
-      });
-
-      const openModal = e => {
-          let modalText = "";
-          if (e.target.className.includes("reeses-law")) {
-              modalText = "<p>“KEEP new and used batteries OUT OF REACH OF CHILDREN.” (Reese's Law)</p>";
-          } else if (e.target.className.includes("prop-65")) {
-              modalText = "<p>Warning: Cancer and Reproductive Harm <a href='https://www.p65warnings.ca.gov' target='_new'>www.p65warnings.ca.gov</a></p>";
-          }
-          $(document.querySelector(".warning-modal-content")).html(modalText);
-          modal?.classList.remove("hidden");
-          overlay?.classList.remove("hidden");
-      };
-
-      openModalBtn?.addEventListener("click", openModal);
-      openReesesModalBtn?.addEventListener("click", openModal);
-
-      // Add Prop 65, Reeses, Pim, Non-Stock labels
-      const descriptionRegion = $('.description-region')[0]?.children[0];
-      const ribbonLabel = $('.ribbon-container');
-
-      const hasProp65 = $('.attribute-name:contains("Prop 65")').next()?.text().includes("Yes");
-      const hasReese = $('.attribute-name:contains("Reese")').next()?.text().includes("Yes");
-      const hasPim = $('.attribute-name:contains("Private Label")').next()?.text().includes("Yes");
-      const isNonStock = $('.attribute-name:contains("Inventory Status")').next()?.text().includes("Stocked") === false;
-
-      if (hasProp65 && !$(descriptionRegion).find('.prop-65').length) {
-          $(descriptionRegion).append("<div class='prop-65'>...Prop65 HTML...</div>");
-      }
-
-      if (hasPim && !$(ribbonLabel).find('p.pim-label').length) $(ribbonLabel).prepend('<p class="pim-label">TriMark</p>');
-      if (isNonStock && !$(ribbonLabel).find('p.non-stock-pdp').length) $(ribbonLabel).prepend('<p class="non-stock-pdp">Non-Stock</p>');
-      if (hasReese && !$(descriptionRegion).find('.reeses-law').length) $(descriptionRegion).append("<div class='reeses-law'>...Reese HTML...</div>");
+// Open PDF links in a new window
+window.openPdfLinksInNewWindow = () => {
+  $(".download a").each(function () {
+    const link = $(this);
+    link.removeAttr("download");
+    link.attr("target", "_blank");
   });
 };
 
-// ===========================================================
-// Initialize everything
-// ===========================================================
-$(document).ready(async () => {
-  window.initProductDetailObserver();
-  window.initProductDetailNodeListener();
-  await window.loadWarehouses();
-  await window.setProductDescriptionToItemName();
-});
+// Fetch and store warehouses
+window.loadWarehouses = async () => {
+  try {
+    const data = await window.getWarehouses();
+    const warehouseList = data.map((w) => w.id);
+    $("body").data({ warehouses: warehouseList });
+    await window.getItemWarehouseInfo();
+  } catch (err) {
+    console.error("Error loading warehouses:", err);
+  }
+};
+
+// Get item warehouse info
+window.getItemWarehouseInfo = async () => {
+  try {
+    const warehouses = $("body").data("warehouses");
+    const widgetInstance =
+      window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"]?.instance;
+    const itno = widgetInstance?.productDetailModel?.id;
+
+    const result = await window.isNonStock(itno, warehouses);
+    const shippingInformation = $(".product-information .shipping-information");
+    const ribbonLabel = $(".ribbon-container");
+
+    const lowShippingText = `<p class="low-shipping" style="margin-top:10px;color:#a12641"><i>ETA - Shipping 2-3 weeks</i></p>`;
+    const hasNoStock = $(".title").text().includes("No Stock");
+
+    if (result && !hasNoStock) {
+      $(".ribbon-container").css("display", "block");
+      if (!ribbonLabel.find("p.non-stock-pdp").length) {
+        ribbonLabel.prepend(`<p class="non-stock-pdp" style="width: 100px">Non-Stock</p>`);
+      }
+      shippingInformation.append(lowShippingText);
+      $(".title").hide();
+    } else if (!result && hasNoStock) {
+      // do nothing
+    } else {
+      const stockText = $(".stock-text");
+      stockText.text(`${stockText.text()} quantity`);
+      stockText.append(
+        "<div class='stocked-text-oos' style='display:block'><b>ETA - Shipping 2-3 days</b></div>"
+      );
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+// Determine if product is non-stock
+window.isNonStock = async (itno, warehouseList) => {
+  const g_EXPORTMI_MITBAL = "/o/generic-api/EXPORTMI_MITBAL?qery=";
+  const querystr = `MBCONO,MBITNO,MBWHLO,MBIPLA,MBOPLC[ ]from[ ]MITBAL[ ]where[ ]MBCONO[ ]=[ ]200[ ]and[ ]MBITNO[ ]=[ ][']${itno}[']`;
+  const apiurl = g_EXPORTMI_MITBAL + querystr;
+
+  try {
+    const res = await fetch(apiurl);
+    const data = await res.json();
+    const hasStock = data.results[0].records.some((rec) => {
+      const repl = rec.REPL.toString().split(";");
+      return repl[4] === "1" && warehouseList.includes(repl[2]);
+    });
+    return !hasStock;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return false;
+  }
+};
+
+// Get warehouse list
+window.getWarehouses = async () => {
+  try {
+    const res = await fetch("/delegate/ecom-api/warehouses?size=100");
+    return await res.json();
+  } catch (error) {
+    console.error("(error)->", error);
+    throw error;
+  }
+};
+
+// Set product description and features
+window.setProductDescriptionToItemName = async () => {
+  const widgetInstance =
+    window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"]?.instance;
+  const itno = widgetInstance?.productDetailModel?.attributes?.id;
+  const apiUrl = `/delegate/ecom-api/items/${itno}/attributes?size=-1`;
+
+  try {
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+
+    const brand = data.find((obj) => obj.name === "Brand");
+    const brandName = brand?.values?.[0];
+    const standards = data.filter((obj) => obj.key === "PMDM.AT.Standards");
+    const featureBullets = data.filter((obj) =>
+      ["PMDM.AT.FeatureBullet1", "PMDM.AT.FeatureBullet2", "PMDM.AT.FeatureBullet3"].includes(
+        obj.key
+      )
+    );
+    const discontinued = data.find((obj) => obj.key === "PMDM.AT.DISCONTINUE");
+
+    if (brandName) window.addBrand(brandName);
+    if (standards.length) window.displayStandardsWithSprites(standards);
+    if (featureBullets.length) window.addBulletToDecription(featureBullets);
+
+    if (discontinued) {
+      $(".ribbon-container").prepend('<p class="item-discontinued">Limited Stock Available</p>');
+    }
+  } catch (error) {
+    console.error("(error)->", error);
+  }
+};
