@@ -251,7 +251,7 @@ const checkoutObserver = new MutationObserver((_mutationList, observer) => {
         if(!sessionStorage.getItem('transactionalEmailSent')) {
             sessionStorage.setItem('transactionalEmailSent', true)
             $.ajax({
-                url: 'https://rhythm-hubspot-proxy.vercel.app/post-to-hubspot',
+                url: 'https://eba-rhythm.trimarketplace.com/post-to-hubspot',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -280,7 +280,7 @@ const checkoutObserver = new MutationObserver((_mutationList, observer) => {
             sessionStorage.setItem('triggerAbandonCart', false)
             console.log('updating abandon cart trigger to false')
             $.ajax({
-                url: `https://rhythm-hubspot-proxy.vercel.app/abandon-cart?email=${customerEmail}`,
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
                 type: 'patch',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -305,7 +305,7 @@ const checkoutObserver = new MutationObserver((_mutationList, observer) => {
             sessionStorage.setItem('triggerPendingApproval', 'false')
             console.log('updating approver notify to false')
             $.ajax({
-                url: `https://rhythm-hubspot-proxy.vercel.app/abandon-cart?email=${customerEmail}`,
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
                 type: 'patch',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -356,7 +356,7 @@ var abandonCartInterval = window.setInterval(function() {
         if(sendCount === 0) {
             sendCount++;
             $.ajax({
-                url: `https://rhythm-hubspot-proxy.vercel.app/abandon-cart?email=${customerEmail}`,
+                url: `https://eba-rhythm.trimarketplace.com/abandon-cart?email=${customerEmail}`,
                 type: 'patch',
                 dataType: 'json',
                 contentType: 'application/json',
