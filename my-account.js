@@ -31,7 +31,7 @@ window.g_crs610_GetOrderInfo = '/o/generic-api/GetOrderInfo?cuno=';
 window.g_mns150_GetUserData = '/o/generic-api/GetUserData?usid=';
 
 window.dspSaleInfo = function () {
-  const ele = $('.rhy.widget__rhythmecomcustomerservicecontactinfoportlet_WAR_rhythmecomcustomerservicecontactinfoportlet_ .dashboard-container.customer-service')[0];
+  const ele = $('.rhy .customer-service .details')[0];
   if (!ele || !window.g_curUser) {
     setTimeout(window.dspSaleInfo, 200);
     return;
@@ -66,17 +66,38 @@ window.getSalesmanDetail = function (smcd) {
         const sphone = rec.PHNO;
 
         sessionStorage.setItem('salesEmail', semail);
+        sessionStorage.setItem('salesEmail', data.results[0].records[0].EMAL);
 
-        // Retrieve web content and replace placeholders
-        let wc = window.getArticleX?.("SALESCONTACT") || "";
-        wc = wc.replace("$.name$", sname)
-               .replace("$.email$", semail)
-               .replace("$.phone$", sphone);
+        if (data.nrOfSuccessfullTransactions > 0) {
+          let sname = data.results[0].records[0].NAME;
+          let semail = data.results[0].records[0].EMAL;
+          let sphone = data.results[0].records[0].PHNO;
 
-        const ele = $('.rhy.widget__rhythmecomcustomerservicecontactinfoportlet_WAR_rhythmecomcustomerservicecontactinfoportlet_ .dashboard-container.customer-service ul')[0];
-        $(ele).prepend(wc);
-      } else {
-        console.warn("MNS150MI API Error:", data.results[0]);
+          if (sname && sname.includes(',')) {
+            const parts = sname.split(',').map(p => p.trim());
+            if (parts.length === 2) {
+              sname = `${parts[1]} ${parts[0]}`; // "Firstname Lastname"
+            }
+          }
+
+          const salespersonLi = `
+            <li class="salesperson">
+              <label>Sales Representative</label>
+              <div class="formatted-salesperson">
+                <div class="name">${sname || ''}</div>
+                <div>
+                  ${semail ? `<a class="email link-primary" href="mailto:${semail}">${semail}</a>` : ''}
+                </div>
+                <div class="phone">${sphone || ''}</div>
+              </div>
+            </li>
+          `;
+
+          // Prepend it inside the .rhy .customer-service .details element
+          $('.rhy .customer-service .details').prepend(salespersonLi);
+        } else {
+          console.warn("MNS150MI API Error:", data.results[0]);
+        }
       }
     })
     .catch(error => console.error(`getSalesmanDetail() error -> ${error}`));
