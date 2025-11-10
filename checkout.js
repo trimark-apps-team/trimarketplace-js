@@ -112,8 +112,8 @@ $(document).ready(function () {
             hasEquipmentTrue = true;
             if (input && input.val() == "") {
                 input.val("equipment |");
-                input.change()
-
+                // disable equipment for now
+                // input.change();
             }
         }
     };
