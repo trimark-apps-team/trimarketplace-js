@@ -196,3 +196,40 @@ $(document).ready(function () {
     if (submitURL) window.submitHSForm(submitURL, formData);
   }, 1000);
 });
+
+
+/* ===========================================================
+   USER COMPANY DISPLAY + OBSERVER
+=========================================================== */
+
+window.setCompanyInfo = function () {
+  const companyName = sessionStorage.getItem("companyName") || "";
+  const customerNumber = sessionStorage.getItem("customerNumber") || "";
+
+  if (!companyName && !companyNumber) return;
+
+  // Only insert if not already present
+  const container = $('.user-component.user-company .user-component-container:first');
+  if (!container.length) return;
+
+  // Check if already added
+  if (!container.find('.company-info').length) {
+    let html = '';
+    if (companyName) html += `<div class='company-name'><span style='font-weight:600;'>${companyName}</span></div>`;
+    if (customerNumber) html += `<div class='company-number'><span style='margin-top:5px;'>Company ID:</span> ${customerNumber}</div>`;
+    container.append(`<div class='company-info'>${html}</div>`);
+  }
+};
+
+// Setup observer for company container
+(function () {
+  const targetNode = document.body;
+  if (!targetNode) return;
+
+  const observerConfig = { childList: true, subtree: true, characterData: true, attributes: true };
+
+  const observerCallback = () => window.setCompanyInfo();
+
+  const observer = new MutationObserver(observerCallback);
+  observer.observe(targetNode, observerConfig);
+})();
