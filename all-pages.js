@@ -115,6 +115,7 @@ window.getArticle2 = function (articleName) {
 // ===========================================================
 window.insertCustomerFooter = function () {
     let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
+    const year = new Date().getFullYear();
     const footerHTML = `<div id="global-trimarkusa-footer">
         <div class="footer-top">
             <div class="footer-top-body">
@@ -163,7 +164,7 @@ window.insertCustomerFooter = function () {
                 </div>
             </div>
         </div>
-        <div class="footer-bottom"><div class="footer-bottom-wrapper"><address>TriMark USA, LLC, 9 Hampshire Street, Mansfield, MA 02048</address><p>Copyright © 2025, All Rights Reserved.</p></div></div>
+        <div class="footer-bottom"><div class="footer-bottom-wrapper"><address>TriMark USA, LLC, 9 Hampshire Street, Mansfield, MA 02048</address><p>Copyright © ${year}, All Rights Reserved.</p></div></div>
     </div>`;
 
     const footerObserver = new MutationObserver(() => {
