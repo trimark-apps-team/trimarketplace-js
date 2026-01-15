@@ -154,7 +154,7 @@ window.isNonStock = async (itno, warehouseList) => {
     const data = await res.json();
     const hasStock = data.results[0].records.some((rec) => {
       const repl = rec.REPL.toString().split(";");
-      return (repl[4] === "1" || repl[4] === "") && warehouseList.includes(repl[2]);
+      return (repl[4] === "1" || repl[4] === "3" ||  repl[4] === "") && warehouseList.includes(repl[2]);
     });
     return !hasStock;
   } catch (error) {
