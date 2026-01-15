@@ -83,7 +83,7 @@ window.isNonStock = async function (itno, warehouseList) {
     if (data.nrOfSuccessfullTransactions > 0) {
       const inventory = data.results[0].records.some(rec => {
         const repl = rec.REPL.toString().split(';');
-        return repl[4] === '1' && warehouseList.includes(repl[2]);
+        return (repl[4] === "1" || repl[4] === "") && warehouseList.includes(repl[2]);
       });
 
       if (!inventory) window.displayNonStockBanner(itno);
