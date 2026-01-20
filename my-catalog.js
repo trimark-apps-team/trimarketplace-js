@@ -2,6 +2,22 @@
    Global Utility & Config
 ================================ */
 window.g_EXPORTMI_MITBAL = '/o/generic-api/EXPORTMI_MITBAL?qery=';
+window.checkedItems = new Set();
+
+/* ================================
+   Reset Non-Stock UI
+================================ */
+window.resetNonStockUI = function () {
+  $("body").removeData("nonStockItems");
+
+  $(".private-label").each(function () {
+    if ($(this).text().trim() === "Non-Stock") {
+      $(this).remove();
+    }
+  });
+
+  $(".non-stocked-text").remove();
+};
 
 /* ================================
    Update Product Description
@@ -18,7 +34,6 @@ window.updateDescription = async function (itno) {
     let itemObj = data.find(obj => obj.key === "PMDM.AT.ItemName");
     let itemNameValue = (itemObj && itemObj.values && itemObj.values[0]) || null;
 
-    // Show TriMark private label if matched
     if (itemNameValue && (
       itemNameValue.includes('Premier') ||
       itemNameValue.includes('Alani') ||
@@ -41,28 +56,32 @@ window.updateDescription = async function (itno) {
 };
 
 /* ================================
-   Display Non-Stock Banner
+   Display Non-Stock Banner (Safe)
 ================================ */
 window.displayNonStockBanner = function (itno) {
-  const nonStockItems = $("body").data("nonStockItems") || [];
-  nonStockItems.push(itno);
-  $("body").data({ nonStockItems });
-
   const cardContainer = $(`#${itno}`);
+  if (!cardContainer.length) return;
+
   const ribbonContainer = $(cardContainer).find('.ribbon-container');
   const stockContainer = $(cardContainer).find('.stock-or-atp-region');
-  const privateLabelContainer = $(ribbonContainer).find('.non-stock');
-  let thisWarning = $(stockContainer).find('.message.warning');
 
-  if ($(privateLabelContainer).length === 0) {
-    $(ribbonContainer).prepend($("<div class='private-label' style='background-color:#FF8C00'>Non-Stock</div>"));
-    if ($(stockContainer).find('.non-stocked-text').length == 0 && $(stockContainer).find('.stocked-text-oos').length == 0) {
-      if ($(thisWarning).text().includes('not in stock')) {
-        $(stockContainer).append("<div class='non-stocked-text'>ETA - Shipping 2-3 weeks.</div>");
-        $(thisWarning).text("Low");
-      } else {
-        $(stockContainer).append("<div class='non-stocked-text' style='color:red'>ETA - Shipping 2-3 weeks.</div>");
-      }
+  if ($(ribbonContainer).find('.non-stock').length) return;
+
+  const thisWarning = $(stockContainer).find('.message.warning');
+
+  $(ribbonContainer).prepend(
+    $("<div class='private-label non-stock' style='background-color:#FF8C00'>Non-Stock</div>")
+  );
+
+  if (
+    $(stockContainer).find('.non-stocked-text').length === 0 &&
+    $(stockContainer).find('.stocked-text-oos').length === 0
+  ) {
+    if ($(thisWarning).text().includes('not in stock')) {
+      $(stockContainer).append("<div class='non-stocked-text'>ETA - Shipping 2-3 weeks.</div>");
+      $(thisWarning).text("Low");
+    } else {
+      $(stockContainer).append("<div class='non-stocked-text' style='color:red'>ETA - Shipping 2-3 weeks.</div>");
     }
   }
 };
@@ -115,41 +134,62 @@ window.fetchWarehouses = async function () {
 };
 
 /* ================================
-   Get All Inventory
+   Get All Inventory (Deduped)
 ================================ */
 window.getAllInventory = function (items) {
   const warehouseData = JSON.parse(sessionStorage.getItem("warehouseData")) || [];
   const warehouseIds = warehouseData.map(wh => wh.id);
-  items.forEach(itno => window.isNonStock(itno, warehouseIds));
+
+  window.checkedItems.clear();
+
+  items.forEach(itno => {
+    if (!window.checkedItems.has(itno)) {
+      window.checkedItems.add(itno);
+      window.isNonStock(itno, warehouseIds);
+    }
+  });
 };
 
 /* ================================
-   Watch Product Cards
+   Watch Product Cards (Pagination Safe)
 ================================ */
 window.watchProductCards = function () {
   const productGridSelector = '.products.grid';
   const productCardSelector = '.product-card';
   let productIds = [];
+  let debounceTimer = null;
 
   const getProductIds = () =>
-    Array.from(document.querySelectorAll(productCardSelector)).map(card => card.id);
+    Array.from(document.querySelectorAll(productCardSelector))
+      .map(card => card.id)
+      .filter(Boolean);
 
   const checkForChanges = () => {
     const newProductIds = getProductIds();
-    if (newProductIds.length !== productIds.length || !newProductIds.every((id, i) => id === productIds[i])) {
+
+    const changed =
+      newProductIds.length !== productIds.length ||
+      !newProductIds.every((id, i) => id === productIds[i]);
+
+    if (changed) {
+      window.resetNonStockUI();
       window.getAllInventory(newProductIds);
       productIds = newProductIds;
     }
   };
 
   const observer = new MutationObserver(() => {
-    if (document.querySelector(productGridSelector)) checkForChanges();
+    if (!document.querySelector(productGridSelector)) return;
+
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(checkForChanges, 150);
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
 
   if (document.querySelector(productGridSelector)) {
     productIds = getProductIds();
+    window.getAllInventory(productIds);
   }
 };
 
@@ -222,6 +262,9 @@ window.applySwatchTransformation = function () {
   });
 };
 
+/* ================================
+   Observe DOM Changes
+================================ */
 window.observeDOMChanges = function () {
   window.applySwatchTransformation();
 
@@ -233,7 +276,7 @@ window.observeDOMChanges = function () {
 };
 
 /* ================================
-   Initialize on Document Ready
+   Initialize
 ================================ */
 $(document).ready(function () {
   setTimeout(window.fetchWarehouses, 1500);
