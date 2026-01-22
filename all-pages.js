@@ -149,11 +149,11 @@ window.insertCustomerFooter = function () {
                         <nav class="link-column">
                             <p class="column-head">Legal</p>
                             <ul>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Website-Terms-of-Use-2-27-23.pdf" target="_blank">Terms of Use</a></li>
+                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Website-Terms-of-Use.pdf" target="_blank">Terms of Use</a></li>
                                 <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/Trimark-Code-Of-Business-Ethics-and-Conduct.pdf" target="_blank">Code of Business Ethics and Conduct</a></li>
                                 <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-of-Design.pdf" target="_blank">Terms of Design<svg class="icon external-link"><use xlink:href="#external-link"></use></svg></a></li>
                                 <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-USA-Site-Privacy-Policy.pdf" target="_blank">Privacy Policy</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-California-Privacy-Notice-07-21-2022.pdf" target="_blank">California Privacy Notice</a></li>
+                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-California-Privacy-Notice.pdf" target="_blank">California Privacy Notice</a></li>
                                 <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-and-Conditions-of-Sale.pdf" target="_blank">Terms of Sale</a></li>
                                 <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-of-Purchase.pdf" target="_blank">Terms of Purchase</a></li>
                                 <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/2022_TriMark_Trademarks.pdf" target="_blank">TriMark USA Trademarks</a></li>
