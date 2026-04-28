@@ -175,17 +175,10 @@ $(document).ready(function () {
 
   // HubSpot settings
   const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
-  const prodPortalId = '9416274';
-  const qaPortalId = '20922853';
-  const prodFormGuid = '9c4843e5-fa59-4d69-a685-39655fa05a50';
-  const qaFormGuid = '2cfec285-66e3-4121-b71b-e4c0bde110db';
-
-  let submitURL = '';
-  if (window.location.href.includes('qa.')) {
-    submitURL = `${baseSubmitURL}/${qaPortalId}/${qaFormGuid}`;
-  } else if (window.location.href.includes('shop.')) {
-    submitURL = `${baseSubmitURL}/${prodPortalId}/${prodFormGuid}`;
-  }
+  const portalId = '9416274';
+  const formGuid = '9c4843e5-fa59-4d69-a685-39655fa05a50';
+  let submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+  
 
   // Delay HubSpot submission slightly
   setTimeout(function () {
