@@ -114,50 +114,56 @@ window.getArticle2 = function (articleName) {
 // Customer Footer & White Logo
 // ===========================================================
 window.insertCustomerFooter = function () {
-    let domain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
+    let rhythmDomain = window.location.hostname.includes("qa") ? "https://qa.trimarketplace.com" : "https://shop.trimarketplace.com";
     const year = new Date().getFullYear();
     const footerHTML = `<div id="global-trimarkusa-footer">
         <div class="footer-top">
             <div class="footer-top-body">
                 <div class="contact-banner">
                     <div class="logo">
-                        <a href="${domain}/login" aria-label="TriMark Home">
+                        <a href="${rhythmDomain}/login" aria-label="TriMark Home">
                             <img width="170" src="https://docs.trimarkusa.com/hubfs/trimark-logo-hubspot.png" alt="TriMark" />
                         </a>
                     </div>
                     <a href="tel:8882885346" class="phone"><i class="fa fa-phone"></i> (888) 288-5346</a>
                     <div class="email"><i class="fa fa-envelope"></i><a href="mailto:trimarketplacesupport@trimarkusa.com">trimarketplacesupport@trimarkusa.com</a></div>
-                    <nav class="social"><ul>
-                        <li class="social-icon"><a href="https://www.facebook.com/TrimarkUSA" target="_new"><svg class="icon facebook"><use xlink:href="#facebook"></use></svg></a></li>
-                        <li class="social-icon"><a href="https://twitter.com/TriMarkUSA" target="_new"><svg class="icon twitter"><use xlink:href="#twitter"></use></svg></a></li>
-                        <li class="social-icon"><a href="http://linkedin.com/company/trimarkusa/" target="_new"><svg class="icon linkedin"><use xlink:href="#linkedin"></use></svg></a></li>
-                        <li class="social-icon"><a href="https://www.youtube.com/channel/UC-_N3m1fOpMpdFTldZyKMvA" target="_new"><svg class="icon youtube"><use xlink:href="#youtube"></use></svg></a></li>
-                        <li class="social-icon"><a href="https://www.instagram.com/trimarkusa/" target="_new"><svg class="icon instagram"><use xlink:href="#instagram"></use></svg></a></li>
-                        <li class="social-icon"><a href="https://www.pinterest.com/TriMarkUSA/" target="_new"><svg class="icon pinterest"><use xlink:href="#pinterest"></use></svg></a></li>
-                    </ul></nav>
                 </div>
                 <div class="link-wrapper">
                     <div class="link-columns">
                         <nav class="link-column">
                             <p class="column-head">Company</p>
                             <ul>
-                                <li class="link"><a href="${domain}/about-us" target="_blank">About Us</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/where-we-serve" target="_blank">Locations</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/who-we-are" target="_blank">About Us</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/where-we-serve" target="_blank">Locations</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/careers" target="_blank">Careers</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/legal-terms" target="_blank">Legal and Compliance</a></li>
                                 <li class="link"><a href="https://support.trimarketplace.com/en/knowledge" target="_blank">FAQs</a></li>
+                                <li class="link social-icon-item">
+                                    <a class="linkedin-icon-footer" href="https://www.linkedin.com/company/trimarkusa/" target="_blank" rel="noopener noreferrer" aria-label="Visit us on LinkedIn" style="position: relative; top: 9px;">
+                                        <img src="https://www.trimarkusa.com/hubfs/raw_assets/public/TriMarkUSA-DEV/images/linkedin-icon-brown.svg" alt="" width="24" height="24">
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                         <nav class="link-column">
-                            <p class="column-head">Legal</p>
+                            <p class="column-head">Services</p>
                             <ul>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Website-Terms-of-Use.pdf" target="_blank">Terms of Use</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/Trimark-Code-Of-Business-Ethics-and-Conduct.pdf" target="_blank">Code of Business Ethics and Conduct</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-of-Design.pdf" target="_blank">Terms of Design<svg class="icon external-link"><use xlink:href="#external-link"></use></svg></a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-USA-Site-Privacy-Policy.pdf" target="_blank">Privacy Policy</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-California-Privacy-Notice.pdf" target="_blank">California Privacy Notice</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-and-Conditions-of-Sale.pdf" target="_blank">Terms of Sale</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Terms-of-Purchase.pdf" target="_blank">Terms of Purchase</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/2022_TriMark_Trademarks.pdf" target="_blank">TriMark USA Trademarks</a></li>
-                                <li class="link"><a href="https://docs.trimarkusa.com/hubfs/SiteMedia/SiteResources/Terms/TriMark-Supplier-Code-of-Conduct.pdf" target="_blank">Supplier Code of Conduct</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/what-we-do" target="_blank">Equipment, Supplies and Services Solutions</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/what-we-do/exceptional-design" target="_blank">Exceptional Design</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/what-we-do/white-glove-service" target="_blank">White Glove Service</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/what-we-do/equipment-rentals" target="_blank">Equipment Rentals</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/what-we-do/chemical-programs" target="_blank">Chemical Programs</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/trimark-scientific" target="_blank">TriMark Scientific</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/sitemedia/siteresources/resources/Cleveland-SS-Kemp-Inbound-Routing-Guide-July-2025.pdf" target="_blank">Routing Guide</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/sourcewell" target="_blank">Sourcewell</a></li>
+                            </ul>
+                        </nav>
+                          <nav class="link-column">
+                            <p class="column-head">Catalogs</p>
+                            <ul>
+                                <li class="link"><a href="https://www.trimarkusa.com/premier-collections-catalog" target="_blank">Premier Collections</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/instyle-catalog" target="_blank">InStyle Catalog</a></li>
+                                <li class="link"><a href="https://www.trimarkusa.com/culinary-essentials-catalog" target="_blank">Culinary Essentials</a></li>
                             </ul>
                         </nav>
                     </div>
