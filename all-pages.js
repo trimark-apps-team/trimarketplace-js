@@ -272,6 +272,28 @@ window.approvalDetsObserver = new MutationObserver(() => {
 });
 window.approvalDetsObserver.observe(document.body, { childList: true, subtree: true });
 
+
+// ===========================================================
+// Hubspot helper for continuous contact tracking
+// ===========================================================
+
+window.identifyHubSpotCustomer = function () {
+    const customerEmail = sessionStorage.getItem('customerEmail');
+
+    if (!customerEmail) return;
+
+    window._hsq = window._hsq || [];
+
+    window._hsq.push([
+        'identify',
+        {
+            email: customerEmail
+        }
+    ]);
+
+    window._hsq.push(['trackPageView']);
+};
+
 // ===========================================================
 // Document Ready Initialization
 // ===========================================================
@@ -282,4 +304,5 @@ $(document).ready(function() {
     window.insertCustomerFooter();
     window.appendWhiteLogo();
     window.setCustLogo();
+    window.identifyHubSpotCustomer();
 });

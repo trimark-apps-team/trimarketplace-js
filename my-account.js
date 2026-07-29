@@ -166,28 +166,39 @@ $(document).ready(function () {
   // Load salesperson info
   window.dspSaleInfo();
 
-  // Retrieve current user info
-  $.get("/delegate/ecom-api/users/current", function (data) {
-    sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber);
-    sessionStorage.setItem('customerEmail', data.email);
-    sessionStorage.setItem('companyName', data.activeUserGroup.name);
-  });
-
   // HubSpot settings
   const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
   const portalId = '9416274';
   const formGuid = '9c4843e5-fa59-4d69-a685-39655fa05a50';
   let submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
-  
 
-  // Delay HubSpot submission slightly
-  setTimeout(function () {
+  // Retrieve current user info. fire off hubspot form submission and 
+  // initial identify and pageview tracking
+  $.get("/delegate/ecom-api/users/current", function (data) {
+    sessionStorage.setItem('customerNumber', data.activeUserGroup.customerNumber);
+    sessionStorage.setItem('customerEmail', data.email);
+    sessionStorage.setItem('companyName', data.activeUserGroup.name);
+
+    // Associate the current browser session with the HubSpot contact
+    window._hsq = window._hsq || [];
+
+    window._hsq.push([
+      'identify',
+      {
+        email: data.email
+      }
+    ]);
+    window._hsq.push(['trackPageView']);
+
+    // Submit HubSpot form after successfully retrieving the logged-in user
     const formData = window.prepareHSFormSubmission(
       sessionStorage.getItem('companyName'),
       sessionStorage.getItem('customerNumber')
     );
-    if (submitURL) window.submitHSForm(submitURL, formData);
-  }, 1000);
+    window.submitHSForm(submitURL, formData);
+
+  });
+
 });
 
 
