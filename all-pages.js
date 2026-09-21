@@ -137,7 +137,7 @@ window.insertCustomerFooter = function () {
                                 <li class="link"><a href="https://www.trimarkusa.com/where-we-serve" target="_blank">Locations</a></li>
                                 <li class="link"><a href="https://www.trimarkusa.com/careers" target="_blank">Careers</a></li>
                                 <li class="link"><a href="https://www.trimarkusa.com/legal-terms" target="_blank">Legal and Compliance</a></li>
-                                <li class="link"><a href="https://support.trimarketplace.com/en/knowledge" target="_blank">FAQs</a></li>
+                                <li class="link"><a href="https://support.trimarketplace.com" target="_blank">FAQs</a></li>
                                 <li class="link social-icon-item">
                                     <a class="linkedin-icon-footer" href="https://www.linkedin.com/company/trimarkusa/" target="_blank" rel="noopener noreferrer" aria-label="Visit us on LinkedIn" style="position: relative; top: 9px;">
                                         <img src="https://www.trimarkusa.com/hubfs/raw_assets/public/TriMarkUSA-DEV/images/linkedin-icon-brown.svg" alt="" width="24" height="24">
