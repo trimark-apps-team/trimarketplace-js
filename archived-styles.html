@@ -1,6 +1,23 @@
 <p> </p>
 <!--Start of HubSpot Embed Code --><script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/9416274.js"></script>
 <style type="text/css">/*CSS Override */
+/ * color family filter*/
+ .rhy .filter-list.facet-details[data-facettype="pmdmatcolorfamily"]  .input-checkbox + label::before  {
+  opacity: 0;
+}
+
+
+.rhy .filter-list.facet-details[data-facettype="pmdmatcolorfamily"] .input-checkbox + label::before  {
+ opacity: 0 !important;
+}
+
+.rhy .filter-list.facet-details[data-facettype="pmdmatcolorfamily"] label  {
+ padding: inherit !important;
+}
+
+.rhy .filter-list.facet-details[data-facettype="pmdmatcolorfamily"] .field.filter-category  {
+ margin: 0 !important;
+}
 
   .rhy a.survey-link {
    display: none !important;
@@ -843,7 +860,6 @@ visibility: hidden;
    display: flex;
    flex-direction: row;
    margin-bottom: 0;
-   width: 90px;
    padding-top: 7px;
 }
 
@@ -921,6 +937,8 @@ visibility: hidden;
 }
 
   .rhy .promo-ribbon.new {
+    position: relative;
+    margin-top: -24px;
     background: #007A33;
     font-size: 12px;
     font-weight: 300;
@@ -1025,13 +1043,42 @@ visibility: hidden;
   padding-right: 0 !important;
 }
 
-// product details page
-.rhy .add-to-cart .stock-text {
-  //display: none;
+/* product details page */
+/* .rhy .add-to-cart .stock-text {
+  display: none;
+} */
+
+.rhy div.add-to-cart {
+      display: flex;
+    flex-direction: row;
+    width: 341px;
+    position: relative;
 }
 
-.rhy .information .attr .product-description {
-  display: none;
+.rhy .product-detail .inner-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.rhy .product-detail .btn-wide-container {
+    /* display: flex; */
+    margin-top: 20px;
+}
+
+@media only screen and (min-width: 40.0625em) {
+    .rhy .product-detail .btn-wide-container .add-to-cart, .rhy .product-detail .btn-wide-container .configure {
+        margin: auto !important;
+    }
+}
+.rhy div.add-to-cart .product-actions-wrapper {
+      position: absolute;
+    right: 0;
+}
+
+
+.rhy .information .product-description:nth-of-type(2) {
+    display: none !important;
+  //display: none;
 }
 
 // hide extra addresses
@@ -1233,6 +1280,7 @@ visibility: hidden;
   background-position: -120px -247px;
 }
 
+
 .rhy .product-standard.energy-star {
   width: 100px;
   height: 100px;
@@ -1249,6 +1297,15 @@ visibility: hidden;
   padding: 0;
   margin: 0;
 }
+
+li a.submenu-toggler span.name:contains("Product Details") {
+  display: none;
+}
+
+  li:has(.submenu-toggler .name:contains("Product Details")) {
+    display: none !important;
+}
+
 
  .rhy .content-box header {
   background: none;
@@ -1317,6 +1374,7 @@ visibility: hidden;
     padding-top: 45px;
     flex: 1;
     font-size: 13px;
+    margin-top: 2px;
   }
   .footer-top .footer-top-body .contact-banner .social  {
     display: flex;
@@ -1395,7 +1453,6 @@ visibility: hidden;
     padding-left: 3px;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
   }
 
   .footer-top .footer-top-body .link-columns .link-column  {
@@ -1464,9 +1521,10 @@ visibility: hidden;
     display: flex;
     margin: 0 auto;
     height: 100%;
+    justify-content: space-between;
   }
 
-  .footer-bottom .address {
+  .footer-bottom-wrapper address {
     flex: 1;
     align-self: center;
     font-style: normal;
@@ -1474,7 +1532,7 @@ visibility: hidden;
     font-size: 13px;
   }
 
-  .footer-bottom .copyright {
+  .footer-bottom-wrapper p {
 
       align-self: center;
       flex: 0 400px;
@@ -1517,12 +1575,12 @@ visibility: hidden;
     }
 
 
-    .footer-bottom .address {
+    .footer-bottom-wrapper address {
       display: block;
       text-align: center;
       padding: 15px 0 0 0;
     }
-    .footer-bottom .copyright {
+    .footer-bottom-wrapper p {
       display: block;
       text-align: center;
       padding: 15px 0 0 0;
@@ -1545,4 +1603,11 @@ visibility: hidden;
 <style type="text/css">#p_p_id_rhythmdynamicmenufooterportlet_WAR_rhythmdynamicmenuportlet_ .portlet-content { border-style: none;
   }
 </style>
+<script>
+document.querySelectorAll('li').forEach(li => {
+    if (li.textContent.includes("Product Details")) {
+        li.style.display = 'none';
+    }
+});
+</script>
 <p> </p>
