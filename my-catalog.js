@@ -113,6 +113,13 @@ window.displayNonStockBanner = function (itno) {
       "<div class='non-stock-text' style='color:red'>ETA - Shipping 2-3 weeks.</div>"
     );
   }
+
+  //if its normal stock
+  else {
+     stockContainer.append(
+      "<div class='non-stock-text' style='color:red'>ETA - Shipping 2-3 days.</div>"
+    );
+  }
 };
 
 /* ================================
