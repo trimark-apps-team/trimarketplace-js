@@ -1,35 +1,78 @@
 /* ================================
    Global Utility & Config
 ================================ */
-window.g_EXPORTMI_MITBAL = '/o/generic-api/EXPORTMI_MITBAL?qery=';
+window.g_CMS100MI_LstItmWhsRTHM = '/o/generic-api/CMS100MI_LstItmWhsRTHM?MBITNO=';
+
+window.fetchJson = async function (url, options = {}) {
+  const res = await fetch(url, options);
+
+  if (!res.ok) {
+    throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+  }
+
+  return res.json();
+};
+
+window.getStoredWarehouseData = function () {
+  try {
+    return JSON.parse(sessionStorage.getItem("warehouseData")) || [];
+  } catch (error) {
+    console.error("getStoredWarehouseData() error ->", error);
+    return [];
+  }
+};
+
+window.getStoredWarehouseIds = function () {
+  return window
+    .getStoredWarehouseData()
+    .map(wh => wh.id?.toString().trim())
+    .filter(Boolean);
+};
 
 /* ================================
-   Update Product Description
+   Fetch Warehouses
+================================ */
+window.fetchWarehouses = async function () {
+  try {
+    const data = await window.fetchJson('/delegate/ecom-api/warehouses?size=100');
+    const warehouseIds = data
+      .map(wh => wh.id?.toString().trim())
+      .filter(Boolean);
+
+    $("body").data({ warehouses: warehouseIds });
+    sessionStorage.setItem("warehouseData", JSON.stringify(data));
+
+    return warehouseIds;
+  } catch (error) {
+    console.error("fetchWarehouses() error ->", error);
+    $("body").data({ warehouses: [] });
+    return [];
+  }
+};
+
+/* ================================
+   Update Product Description & TriMark Label
 ================================ */
 window.updateDescription = async function (itno) {
-  const apiUrl = `/delegate/ecom-api/items/${itno}/attributes?size=-1`;
+  const apiUrl = `/delegate/ecom-api/items/${encodeURIComponent(itno)}/attributes?size=-1`;
   const card = $('#' + itno);
-  const productCardTitle = $(card).find('h7');
 
   try {
-    const res = await fetch(apiUrl);
-    const data = await res.json();
+    const data = await window.fetchJson(apiUrl);
 
-    let itemObj = data.find(obj => obj.key === "PMDM.AT.ItemName");
-    let itemNameValue = (itemObj && itemObj.values && itemObj.values[0]) || null;
+    const itemObj = data.find(obj => obj.key === "PMDM.AT.ItemName");
+    const itemNameValue = itemObj?.values?.[0] || "";
 
-    // Show TriMark private label if matched
-    if (itemNameValue && (
-      itemNameValue.includes('Premier') ||
-      itemNameValue.includes('Alani') ||
-      itemNameValue.includes('Culinary Essentials') ||
-      itemNameValue.includes('Kintera')
-    )) {
-      const ribbonContainer = $(card).find('.ribbon-container');
-      const privateLabelContainer = $(ribbonContainer).find('.private-label');
+    const isTriMarkPrivateLabel = ['Premier', 'Alani', 'Culinary Essentials', 'Kintera']
+      .some(value => itemNameValue.includes(value));
 
-      if ($(privateLabelContainer).length === 0) {
-        $(ribbonContainer).prepend($("<div class='private-label'>TriMark</div>"));
+    if (isTriMarkPrivateLabel) {
+      const ribbonContainer = card.find('.ribbon-container');
+
+      if (!ribbonContainer.find('.private-label-trimark').length) {
+        ribbonContainer.prepend(
+          "<div class='private-label private-label-trimark'>TriMark</div>"
+        );
       }
     }
 
@@ -45,26 +88,40 @@ window.updateDescription = async function (itno) {
 ================================ */
 window.displayNonStockBanner = function (itno) {
   const nonStockItems = $("body").data("nonStockItems") || [];
-  nonStockItems.push(itno);
+
+  if (!nonStockItems.includes(itno)) {
+    nonStockItems.push(itno);
+  }
+
   $("body").data({ nonStockItems });
 
-  const cardContainer = $(`#${itno}`);
-  const ribbonContainer = $(cardContainer).find('.ribbon-container');
-  const stockContainer = $(cardContainer).find('.stock-or-atp-region');
-  const privateLabelContainer = $(ribbonContainer).find('.non-stock');
-  let thisWarning = $(stockContainer).find('.message.warning');
+  const card = $('#' + itno);
+  const ribbonContainer = card.find('.ribbon-container');
+  const stockContainer = card.find('.stock-or-atp-region');
 
-  if ($(privateLabelContainer).length === 0) {
-    $(ribbonContainer).prepend($("<div class='private-label' style='background-color:#FF8C00'>Non-Stock</div>"));
-    if ($(stockContainer).find('.non-stocked-text').length == 0 && $(stockContainer).find('.stocked-text-oos').length == 0) {
-      if ($(thisWarning).text().includes('not in stock')) {
-        $(stockContainer).append("<div class='non-stocked-text'>ETA - Shipping 2-3 weeks.</div>");
-        $(thisWarning).text("Low");
-      } else {
-        $(stockContainer).append("<div class='non-stocked-text' style='color:red'>ETA - Shipping 2-3 weeks.</div>");
-      }
-    }
+  if (!ribbonContainer.find('.non-stock-banner').length) {
+    ribbonContainer.prepend(
+      "<div class='private-label non-stock-banner' style='background-color:#FF8C00'>Non-Stock</div>"
+    );
   }
+
+  if (
+    !stockContainer.find('.non-stock-text').length &&
+    !stockContainer.find('.stocked-text-oos').length
+  ) {
+    stockContainer.append(
+      "<div class='non-stock-text' style='color:red'>ETA - Shipping 2-3 weeks.</div>"
+    );
+  }
+};
+
+/* ================================
+   CMS100MI Inventory Lookup
+================================ */
+window.fetchItemWarehouseRhythm = async function (itno) {
+  const url = `${window.g_CMS100MI_LstItmWhsRTHM}${encodeURIComponent(itno)}`;
+  const data = await window.fetchJson(url);
+  return data?.results?.[0]?.records || [];
 };
 
 /* ================================
@@ -72,85 +129,103 @@ window.displayNonStockBanner = function (itno) {
 ================================ */
 window.isNonStock = async function (itno, warehouseList) {
   await window.updateDescription(itno);
-
-  let querystr = `MBCONO,MBITNO,MBWHLO,MBIPLA,MBOPLC[ ]from[ ]MITBAL[ ]where[ ]MBCONO[ ]=[ ]200[ ]and[ ]MBITNO[ ]=[ ][']${itno}[']`;
-  let apiurl = window.g_EXPORTMI_MITBAL + querystr;
-
   try {
-    const res = await fetch(apiurl);
-    const data = await res.json();
+    const records = await window.fetchItemWarehouseRhythm(itno);
+ 
+    console.log("Item:", itno);
+    console.log("Account Warehouses:", warehouseList);
 
-    if (data.nrOfSuccessfullTransactions > 0) {
-      const inventory = data.results[0].records.some(rec => {
-        const repl = rec.REPL.toString().split(';');
-        return (repl[4] === "1" || repl[4] === "") && warehouseList.includes(repl[2]);
+    records.forEach(rec => {
+      console.log({
+        warehouse: rec.MBWHLO,
+        stockFlag: rec.V_STOC,
+        matchesAccount: warehouseList.includes(
+          rec.MBWHLO?.toString().trim()
+        )
       });
+    });
 
-      if (!inventory) window.displayNonStockBanner(itno);
-      return inventory;
-    } else {
-      console.warn(`M3 API Error: ${data.results[0].errorMessage}`);
-      return false;
+    if (!records.length) {
+      window.displayNonStockBanner(itno);
+      return true;
     }
+
+    const hasStock = records.some(rec => {
+      const warehouse = rec.MBWHLO?.toString().trim();
+      const stockFlag = rec.V_STOC?.toString().trim();
+
+      return warehouseList.includes(warehouse) && stockFlag !== "N";
+    });
+
+    if (!hasStock) {
+      window.displayNonStockBanner(itno);
+    }
+
+    return !hasStock;
   } catch (error) {
     console.error(`isNonStock() error -> ${error}`);
-    return false;
-  }
-};
-
-/* ================================
-   Fetch Warehouses
-================================ */
-window.fetchWarehouses = async function () {
-  try {
-    const res = await fetch('/delegate/ecom-api/warehouses?size=100');
-    const data = await res.json();
-
-    if (data?.length) {
-      sessionStorage.setItem("warehouseData", JSON.stringify(data));
-    }
-  } catch (error) {
-    console.error("fetchWarehouses() error ->", error);
+    window.displayNonStockBanner(itno);
+    return true;
   }
 };
 
 /* ================================
    Get All Inventory
 ================================ */
-window.getAllInventory = function (items) {
-  const warehouseData = JSON.parse(sessionStorage.getItem("warehouseData")) || [];
-  const warehouseIds = warehouseData.map(wh => wh.id);
-  items.forEach(itno => window.isNonStock(itno, warehouseIds));
+window.getAllInventory = async function (items) {
+  const warehouseIds = window.getStoredWarehouseIds();
+
+  for (const itno of items) {
+    try {
+      if (!warehouseIds.length) {
+        window.displayNonStockBanner(itno);
+        continue;
+      }
+
+      await window.isNonStock(itno, warehouseIds);
+    } catch (error) {
+      console.error(`Error checking inventory for ${itno}`, error);
+      window.displayNonStockBanner(itno);
+    }
+  }
 };
 
 /* ================================
    Watch Product Cards
 ================================ */
 window.watchProductCards = function () {
-  const productGridSelector = '.products.grid';
   const productCardSelector = '.product-card';
   let productIds = [];
 
-  const getProductIds = () =>
-    Array.from(document.querySelectorAll(productCardSelector)).map(card => card.id);
+  const getProductIds = function () {
+    return Array.from(document.querySelectorAll(productCardSelector))
+      .map(card => card.id)
+      .filter(Boolean);
+  };
 
-  const checkForChanges = () => {
-    const newProductIds = getProductIds();
-    if (newProductIds.length !== productIds.length || !newProductIds.every((id, i) => id === productIds[i])) {
-      window.getAllInventory(newProductIds);
-      productIds = newProductIds;
+  const checkForChanges = function () {
+    const newIds = getProductIds();
+
+    const hasChanged =
+      newIds.length !== productIds.length ||
+      !newIds.every((id, index) => id === productIds[index]);
+
+    if (hasChanged) {
+      productIds = newIds;
+      window.getAllInventory(productIds);
     }
   };
 
-  const observer = new MutationObserver(() => {
-    if (document.querySelector(productGridSelector)) checkForChanges();
+  const observer = new MutationObserver(function () {
+    if (document.querySelector('.products.grid')) {
+      checkForChanges();
+    }
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
 
-  if (document.querySelector(productGridSelector)) {
-    productIds = getProductIds();
-  }
+  productIds = getProductIds();
+  window.getAllInventory(productIds);
 };
 
 /* ================================
@@ -158,74 +233,77 @@ window.watchProductCards = function () {
 ================================ */
 window.applySwatchTransformation = function () {
   const colorFamilyList = document.querySelector("#pmdm\\.at\\.colorfamily");
+
   if (!colorFamilyList) return;
 
   colorFamilyList.querySelectorAll(".input-checkbox + label").forEach(label => {
-    let checkbox = label.previousElementSibling;
-    if (checkbox && !label.querySelector(".color-swatch")) {
-      let color = checkbox.value.toLowerCase();
-      let colorMap = {
-        amber: "#FFBF00",
-        black: "black",
-        copper: "#b87333",
-        gray: "gray",
-        green: "green",
-        natural: "#d2b48c",
-        red: "red",
-        silver: "silver",
-        brown: "brown",
-        clear: "white",
-        white: "white",
-        yellow: "yellow",
-        beige: "beige",
-        blue: "blue",
-        orange: "orange",
-        burgundy: "#800020",
-        pink: "pink",
-        purple: "purple",
-        taupe: "#FFFDD0",
-        cream: "#FFFDD0",
-        ivory: "ivory",
-        walnut: "brown",
-        assorted: "linear-gradient(90deg, Red, Orange, Yellow, Green, Blue, Indigo, Violet)"
-      };
+    const checkbox = label.previousElementSibling;
 
-      if (colorMap[color]) {
-        label.style.display = "flex";
-        label.style.alignItems = "center";
-        label.style.gap = "8px";
-        label.style.cursor = "pointer";
+    if (!checkbox || label.querySelector(".color-swatch")) return;
 
-        let swatch = document.createElement("span");
-        swatch.className = "color-swatch";
-        swatch.style.width = "25px";
-        swatch.style.height = "25px";
-        swatch.style.borderRadius = "5px";
-        swatch.style.border = "1px solid #ccc";
-        swatch.style.background = colorMap[color];
+    const color = checkbox.value.toLowerCase();
 
-        let quantityMatch = label.textContent.match(/\(\d+\)/);
-        let quantityText = quantityMatch ? quantityMatch[0] : "";
+    const colorMap = {
+      amber: "#FFBF00",
+      black: "black",
+      copper: "#b87333",
+      gray: "gray",
+      green: "green",
+      natural: "#d2b48c",
+      red: "red",
+      silver: "silver",
+      brown: "brown",
+      clear: "white",
+      white: "white",
+      yellow: "yellow",
+      beige: "beige",
+      blue: "blue",
+      orange: "orange",
+      burgundy: "#800020",
+      pink: "pink",
+      purple: "purple",
+      taupe: "#FFFDD0",
+      cream: "#FFFDD0",
+      ivory: "ivory",
+      walnut: "brown",
+      assorted: "linear-gradient(90deg, Red, Orange, Yellow, Green, Blue, Indigo, Violet)"
+    };
 
-        label.textContent = quantityText;
-        label.insertBefore(swatch, label.firstChild);
-        label.title = checkbox.value;
+    if (!colorMap[color]) return;
 
-        const updateSwatchBorder = () => {
-          swatch.style.border = checkbox.checked ? "3px solid #000" : "1px solid #ccc";
-        };
+    label.style.display = "flex";
+    label.style.alignItems = "center";
+    label.style.gap = "8px";
+    label.style.cursor = "pointer";
 
-        updateSwatchBorder();
-        checkbox.addEventListener("change", updateSwatchBorder);
-      }
-    }
+    const swatch = document.createElement("span");
+    swatch.className = "color-swatch";
+    swatch.style.width = "25px";
+    swatch.style.height = "25px";
+    swatch.style.borderRadius = "5px";
+    swatch.style.border = "1px solid #ccc";
+    swatch.style.background = colorMap[color];
+
+    const quantityMatch = label.textContent.match(/\(\d+\)/);
+    const quantityText = quantityMatch ? quantityMatch[0] : "";
+
+    label.textContent = quantityText;
+    label.insertBefore(swatch, label.firstChild);
+    label.title = checkbox.value;
+
+    const updateSwatchBorder = function () {
+      swatch.style.border = checkbox.checked ? "3px solid #000" : "1px solid #ccc";
+    };
+
+    updateSwatchBorder();
+    checkbox.addEventListener("change", updateSwatchBorder);
   });
 };
 
 window.observeDOMChanges = function () {
   window.applySwatchTransformation();
 
-  const observer = new MutationObserver(() => {
+  const observer = new MutationObserver(function () {
     window.applySwatchTransformation();
   });
 
@@ -235,8 +313,8 @@ window.observeDOMChanges = function () {
 /* ================================
    Initialize on Document Ready
 ================================ */
-$(document).ready(function () {
-  setTimeout(window.fetchWarehouses, 1500);
-  setTimeout(window.watchProductCards, 1000);
-  setTimeout(window.observeDOMChanges, 2000);
+$(document).ready(async function () {
+  await window.fetchWarehouses();
+  window.watchProductCards();
+  window.observeDOMChanges();
 });

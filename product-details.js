@@ -1,18 +1,60 @@
 // === GLOBAL INITIALIZATION ===
-$(document).ready(function () {
-  setTimeout(window.loadWarehouses, 1500);
-  setTimeout(window.setProductDescriptionToItemName, 1000);
-  setTimeout(window.openPdfLinksInNewWindow, 2000);
+$(document).ready(async function () {
+  try {
+    await window.loadWarehouses();
+    await window.setProductDescriptionToItemName();
+    await window.getItemWarehouseInfo();
+    window.watchPDPChanges(); 
+    window.openPdfLinksInNewWindow();
+  } catch (err) {
+    console.error("Initialization error:", err);
+  }
 });
 
-// === GLOBAL FUNCTIONS ===
+// === GLOBAL CONFIG ===
+window.g_CMS100MI_LstItmWhsRTHM = "/o/generic-api/CMS100MI_LstItmWhsRTHM?MBITNO=";
 
-// Add bullets to product description
-window.addBulletToDecription = (featureBullets) => {
+// === HELPERS ===
+window.getCurrentItemNumber = () => {
+  const widgetInstance =
+    window.App?.WidgetsContainer?.["rhythm-ecom-productdetails-portlet"]?.instance;
+
+  return (
+    widgetInstance?.productDetailModel?.id ||
+    widgetInstance?.productDetailModel?.attributes?.id ||
+    null
+  );
+};
+
+window.waitForCurrentItemNumber = async function (maxAttempts = 8, delay = 300) {
+  let itno = window.getCurrentItemNumber();
+
+  for (let i = 0; i < maxAttempts && !itno; i++) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    itno = window.getCurrentItemNumber();
+  }
+
+  return itno;
+};
+
+window.removeStockMessages = () => {
+  $(".low-shipping").remove();
+  $(".stocked-text-oos").remove();
+  $(".non-stock-banner").remove();
+};
+
+window.openPdfLinksInNewWindow = () => {
+  $(".download a").each(function () {
+    $(this).removeAttr("download").attr("target", "_blank");
+  });
+};
+
+// === FEATURE BULLETS ===
+window.addBulletToDescription = (featureBullets) => {
   if (!featureBullets?.length) return;
 
   const productDescriptionDiv = document.querySelector(".product-description");
-  if (!productDescriptionDiv) return;
+  if (!productDescriptionDiv || document.querySelector(".feature-bullets")) return;
 
   const bulletList = document.createElement("ul");
   bulletList.classList.add("feature-bullets");
@@ -22,187 +64,220 @@ window.addBulletToDecription = (featureBullets) => {
   bulletList.style.color = "black";
 
   featureBullets.forEach((bullet) => {
+    const value = bullet.values?.[0] || bullet.value || "";
+    if (!value) return;
+
     const li = document.createElement("li");
-    li.textContent = bullet.values?.[0] || bullet.value || "";
+    li.textContent = value;
     li.style.marginBottom = "5px";
     bulletList.appendChild(li);
   });
 
+console.log(bulletList);
+console.log('bulletList');
+
   productDescriptionDiv.appendChild(bulletList);
 };
 
-// Display standard logos with sprite positions
-window.displayStandardsWithSprites = (standards) => {
-  const standardPositions = {
-    "Energy Star": "-10px -10px",
-    "Design Certified": "-100px -200px",
-    "cETLus": "-100px -300px",
-    "NSF Certified": "-120px -130px",
-    "NSF": "-120px -130px",
-    "Made in America": "-100px -200px",
-    "cULus": "-235px -227px",
-    "UL": "-10px -239px",
-    "UL Classified": "-10px -239px",
-    "ETL": "-100px -228px",
-  };
-
-  const standardsContainer = document.createElement("div");
-  standardsContainer.classList.add("standards-container");
-  standardsContainer.style.textAlign = "right";
-  standardsContainer.style.marginRight = "50px";
-
-  let found = false;
-  standards.forEach((item) => {
-    const value = item.values?.[0];
-    if (standardPositions[value]) {
-      found = true;
-      const span = document.createElement("span");
-      span.classList.add("swatch-sprite");
-      span.style.backgroundImage =
-        "url('/webdav/shop.trimarketplace.com/document_library/Standard_Logos/logo_swatch.png')";
-      span.style.backgroundRepeat = "no-repeat";
-      span.style.width = "100px";
-      span.style.height = "100px";
-      span.style.display = "inline-block";
-      span.style.marginRight = "5px";
-      span.style.backgroundPosition = standardPositions[value];
-      standardsContainer.appendChild(span);
-    }
-  });
-
-  if (found) {
-    const itemNumberDiv = document.querySelector(".item-number");
-    itemNumberDiv?.insertAdjacentElement("afterend", standardsContainer);
-  }
+// === WAREHOUSES ===
+window.getWarehouses = async () => {
+  const res = await fetch("/delegate/ecom-api/warehouses?size=100");
+  if (!res.ok) throw new Error(`Warehouse request failed: ${res.status}`);
+  return await res.json();
 };
 
-// Add brand name to brand list
-window.addBrand = (brand) => {
-  const ul = document.querySelector("ul.brand-manufacturer");
-  if (ul && ul.children.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = `Brand: ${brand}`;
-    ul.appendChild(li);
-  }
-};
-
-// Open PDF links in a new window
-window.openPdfLinksInNewWindow = () => {
-  $(".download a").each(function () {
-    const link = $(this);
-    link.removeAttr("download");
-    link.attr("target", "_blank");
-  });
-};
-
-// Fetch and store warehouses
 window.loadWarehouses = async () => {
   try {
     const data = await window.getWarehouses();
-    const warehouseList = data.map((w) => w.id);
+    const warehouseList = data
+      .map((w) => w.id?.toString().trim())
+      .filter(Boolean);
+
     $("body").data({ warehouses: warehouseList });
-    await window.getItemWarehouseInfo();
+    return warehouseList;
   } catch (err) {
     console.error("Error loading warehouses:", err);
+    $("body").data({ warehouses: [] });
+    return [];
   }
 };
 
-// Get item warehouse info
-window.getItemWarehouseInfo = async () => {
-  try {
-    const warehouses = $("body").data("warehouses");
-    const widgetInstance =
-      window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"]?.instance;
-    const itno = widgetInstance?.productDetailModel?.id;
-
-    const result = await window.isNonStock(itno, warehouses);
-    const shippingInformation = $(".product-information .shipping-information");
-    const ribbonLabel = $(".ribbon-container");
-
-    const lowShippingText = `<p class="low-shipping" style="margin-top:10px;color:#a12641"><i>ETA - Shipping 2-3 weeks</i></p>`;
-    const hasNoStock = $(".title").text().includes("No Stock");
-
-    if (result && !hasNoStock) {
-      $(".ribbon-container").css("display", "block");
-      if (!ribbonLabel.find("p.non-stock-pdp").length) {
-        ribbonLabel.prepend(`<p class="non-stock-pdp" style="width: 100px">Non-Stock</p>`);
-      }
-      shippingInformation.append(lowShippingText);
-      $(".title").hide();
-    } else if (!result && hasNoStock) {
-      // do nothing
-    } else {
-      const stockText = $(".stock-text");
-      stockText.text(`${stockText.text()} quantity`);
-      stockText.append(
-        "<div class='stocked-text-oos' style='display:block'><b>ETA - Shipping 2-3 days</b></div>"
-      );
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
-// Determine if product is non-stock
+// === STOCK CHECK ===
 window.isNonStock = async (itno, warehouseList) => {
-  const g_EXPORTMI_MITBAL = "/o/generic-api/EXPORTMI_MITBAL?qery=";
-  const querystr = `MBCONO,MBITNO,MBWHLO,MBIPLA,MBOPLC[ ]from[ ]MITBAL[ ]where[ ]MBCONO[ ]=[ ]200[ ]and[ ]MBITNO[ ]=[ ][']${itno}[']`;
-  const apiurl = g_EXPORTMI_MITBAL + querystr;
-
   try {
-    const res = await fetch(apiurl);
+    const url = `${window.g_CMS100MI_LstItmWhsRTHM}${encodeURIComponent(itno)}`;
+    const res = await fetch(url);
+
+    if (!res.ok) throw new Error(`Stock request failed`);
+
     const data = await res.json();
-    const hasStock = data.results[0].records.some((rec) => {
-      const repl = rec.REPL.toString().split(";");
-      return (repl[4] === "1" || repl[4] === "3" ||  repl[4] === "") && warehouseList.includes(repl[2]);
+    const records = data?.results?.[0]?.records || [];
+
+        records.forEach((rec) => {
+      console.log({
+        item: itno,
+        warehouse: rec.MBWHLO,
+        stockFlag: rec.V_STOC,
+        matchesAccount: warehouseList.includes(
+          rec.MBWHLO?.toString().trim()
+        )
+      });
     });
+
+    if (!records.length) return true;
+
+    const hasStock = records.some((rec) => {
+      const warehouse = rec.MBWHLO?.toString().trim();
+      const stockFlag = rec.V_STOC?.toString().trim();
+      return warehouseList.includes(warehouse) && stockFlag !== "N";
+    });
+
     return !hasStock;
   } catch (error) {
-    console.error("Error fetching data:", error);
-    return false;
+    console.error("Stock check error:", error);
+    return true;
   }
 };
 
-// Get warehouse list
-window.getWarehouses = async () => {
+// === STOCK UI ===
+window.renderNonStockUI = () => {
+  const itemNumber = $(".item-number").first();
+  const shippingInformation = $(".product-information .availability-feature").first();
+
+  const bannerHtml = `
+    <div class="non-stock-banner"
+         style="
+           display:inline-block;
+           margin:10px 0;
+           padding:6px 12px;
+           background:#FF8C00;
+           color:#fff;
+           font-weight:700;
+           border-radius:4px;
+         ">
+      Non-Stock
+    </div>
+  `;
+
+  const lowShippingText = `
+    <p class="low-shipping"
+       style="margin-top:10px;color:#a12641;font-style:italic;">
+      ETA - Shipping 2-3 weeks
+    </p>
+  `;
+
+  if (itemNumber.length && !$(".non-stock-banner").length) {
+    itemNumber.after(bannerHtml);
+  }
+
+  if (shippingInformation.length && !shippingInformation.find(".low-shipping").length) {
+    shippingInformation.append(lowShippingText);
+  }
+};
+
+window.renderStockedUI = () => {
+  const stockText = $(".stock-text");
+
+  $(".non-stock-banner").remove();
+  $(".low-shipping").remove();
+
+  if (stockText.length && !stockText.text().includes("quantity")) {
+    stockText.text(`${stockText.text()} quantity`);
+  }
+
+  if (stockText.length && !stockText.find(".stocked-text-oos").length) {
+    stockText.append(
+      "<div class='stocked-text-oos'><b>ETA - Shipping 2-3 days</b></div>"
+    );
+  }
+};
+
+// === PDP STOCK FLOW ===
+window.getItemWarehouseInfo = async () => {
   try {
-    const res = await fetch("/delegate/ecom-api/warehouses?size=100");
-    return await res.json();
+    const warehouseList = $("body").data("warehouses") || [];
+    const itno = await window.waitForCurrentItemNumber();
+
+    if (!itno) return;
+
+    const nonStock = await window.isNonStock(itno, warehouseList);
+
+    window.removeStockMessages();
+
+
+// Give the PDP time to finish rendering
+await new Promise(resolve => setTimeout(resolve, 1000));
+
+if (nonStock) {
+  window.renderNonStockUI();
+} else {
+  window.renderStockedUI();
+}
+
+
   } catch (error) {
-    console.error("(error)->", error);
-    throw error;
+    console.error("PDP stock error:", error);
   }
 };
 
-// Set product description and features
-window.setProductDescriptionToItemName = async () => {
-  const widgetInstance =
-    window.App.WidgetsContainer["rhythm-ecom-productdetails-portlet"]?.instance;
-  const itno = widgetInstance?.productDetailModel?.attributes?.id;
-  const apiUrl = `/delegate/ecom-api/items/${itno}/attributes?size=-1`;
+// === WATCH FOR PDP RE-RENDER ===
+window.watchPDPChanges = function () {
+  let lastItem = null;
 
+  const observer = new MutationObserver(async function () {
+    const itno = window.getCurrentItemNumber();
+
+    if (!itno || itno === lastItem) return;
+
+    lastItem = itno;
+
+    //console.log("PDP changed → rechecking:", itno);
+
+    await window.getItemWarehouseInfo();
+    await window.setProductDescriptionToItemName();
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+};
+
+// === PRODUCT ATTRIBUTES ===
+window.setProductDescriptionToItemName = async () => {
   try {
-    const res = await fetch(apiUrl);
+    const itno = await window.waitForCurrentItemNumber();
+    if (!itno) return;
+
+    const res = await fetch(`/delegate/ecom-api/items/${encodeURIComponent(itno)}/attributes?size=-1`);
+    if (!res.ok) throw new Error("Attributes request failed");
+
     const data = await res.json();
 
     const brand = data.find((obj) => obj.name === "Brand");
     const brandName = brand?.values?.[0];
-    const standards = data.filter((obj) => obj.key === "PMDM.AT.Standards");
+
     const featureBullets = data.filter((obj) =>
-      ["PMDM.AT.FeatureBullet1", "PMDM.AT.FeatureBullet2", "PMDM.AT.FeatureBullet3"].includes(
-        obj.key
-      )
+      [
+        "PMDM.AT.FeatureBullet1",
+        "PMDM.AT.FeatureBullet2",
+        "PMDM.AT.FeatureBullet3"
+      ].includes(obj.key)
     );
-    const discontinued = data.find((obj) => obj.key === "PMDM.AT.DISCONTINUE");
 
-    if (brandName) window.addBrand(brandName);
-    if (standards.length) window.displayStandardsWithSprites(standards);
-    if (featureBullets.length) window.addBulletToDecription(featureBullets);
+    if (brandName) {
+      const ul = document.querySelector("ul.brand-manufacturer");
+      if (ul && ul.children.length === 0) {
+        const li = document.createElement("li");
+        li.innerHTML = `<p class="value">Brand: ${brandName}</p>`;
+        ul.appendChild(li);
+      }
+    }
 
-    if (discontinued) {
-      $(".ribbon-container").prepend('<p class="item-discontinued">Limited Stock Available</p>');
+    if (featureBullets.length) {
+      await window.addBulletToDescription(featureBullets);
     }
   } catch (error) {
-    console.error("(error)->", error);
+    console.error("Attributes error:", error);
   }
 };
